@@ -43,7 +43,7 @@ void Registeruser(Map<String, dynamic> userData)async{
     _dio.options.headers = {
       'Content-Type': 'application/json',
     };
-    Response response = await _dio.post('http://10.0.2.2:8080/user/createuser', data: userData);
+    Response response = await _dio.post('http://10.0.2.2:8080/auth/createuser', data: userData);
     print('Response status: ${response.statusCode}');
     print('Response data: ${response.data}');
 

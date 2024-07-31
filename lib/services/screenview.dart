@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/screens/login.dart';
 import 'package:flutterproject/screens/signup.dart';
 import 'package:flutterproject/screens/home.dart';
 import 'package:flutterproject/models/currentscreen.dart';
@@ -19,4 +20,10 @@ class ScreenViewModel extends ChangeNotifier {
     _screen.updateScreen(SignUpView());
     notifyListeners();
   }
+  void switchToLoginIn(){
+    _screen.updateScreen(LoginPage());
+    notifyListeners();
+
+  }
 }
+

@@ -56,10 +56,15 @@ class SignUpView extends StatelessWidget {
                 },
               ),
               SizedBox(height: 20),
+              ElevatedButton(onPressed: (){
+                screenModel.switchToLoginIn();
+              }, child: Text('Already user')),
+              SizedBox(height: 20),
+
               ElevatedButton(
                 onPressed: (){
                   viewModel.submitForm();
-                  screenModel.switchToHome();
+                  screenModel.switchToLoginIn();
 
                 },
                 child: Text('Sign Up'),

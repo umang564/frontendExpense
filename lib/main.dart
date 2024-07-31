@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/screens/app.dart';
+import 'package:flutterproject/services/LoginViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterproject/services/currentUserForm.dart';
 import 'package:flutterproject/services/screenview.dart';
@@ -10,6 +11,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => SignUpViewModel()),
         ChangeNotifierProvider(create: (context) => ScreenViewModel()),
+        ChangeNotifierProvider(create: (context) => LoginViewModel()),
+
 
       ],
       child: const MyApp(),
