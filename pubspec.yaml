@@ -30,6 +30,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_bloc:
+  bloc:
+  equatable:
+  fountain:
+    
 
   dio: ^5.2.1
   provider:

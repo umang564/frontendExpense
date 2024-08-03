@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/feature/home/home.dart';
 import 'package:flutterproject/screens/app.dart';
 import 'package:flutterproject/services/LoginViewModel.dart';
 import 'package:provider/provider.dart';
 import 'package:flutterproject/services/currentUserForm.dart';
 import 'package:flutterproject/services/screenview.dart';
+import 'package:flutterproject/feature/login/login.dart';
+
 
 void main() {
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => SignUpViewModel()),
-        ChangeNotifierProvider(create: (context) => ScreenViewModel()),
-        ChangeNotifierProvider(create: (context) => LoginViewModel()),
 
 
-      ],
-      child: const MyApp(),
-    ),
+       MyApp(),
+
   );
 }
 
@@ -27,7 +24,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
 
-      home: App(), // Home widget where your main app content resides
+      initialRoute: '/',
+      routes: {
+        '/': (context) => LoginScreen(),
+        '/home': (context) => HomeScreen(),
+      }, // Home widget where your main app content resides
     );
   }
 }
