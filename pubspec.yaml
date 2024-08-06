@@ -34,6 +34,9 @@ dependencies:
   bloc:
   equatable:
   fountain:
+  flutter_secure_storage:
+  dio_cookie_manager:
+  cookie_jar:
     
 
   dio: ^5.2.1

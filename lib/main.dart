@@ -6,14 +6,12 @@ import 'package:provider/provider.dart';
 import 'package:flutterproject/services/currentUserForm.dart';
 import 'package:flutterproject/services/screenview.dart';
 import 'package:flutterproject/feature/login/login.dart';
+import 'package:flutterproject/feature/signup/signup.dart';
 
 
 void main() {
   runApp(
-
-
        MyApp(),
-
   );
 }
 

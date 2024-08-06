@@ -1,13 +1,75 @@
+import 'dart:ffi';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutterproject/feature/dio.dart';
 
 part 'signup_event.dart';
 part 'signup_state.dart';
 
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
-  SignupBloc() : super(SignupInitial()) {
-    on<SignupEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+  SignupBloc() : super(SignupState()) {
+   on<EmailChanged>(_onEmailChanged);
+   on<PasswordChanged>(_onPasswordChanged);
+   on<NameChanged>(_onNameChanged);
+   on<SignupApi>(_signupApi);
   }
+  void _onEmailChanged(EmailChanged event, Emitter<SignupState> emit) {
+    emit(
+      state.copyWith(
+        email: event.email,
+      ),
+    );
+  }
+
+  void _onPasswordChanged(PasswordChanged event ,Emitter<SignupState>emit){
+    emit(state.copyWith(password:event.password,),);
+  }
+
+
+  void _onNameChanged(NameChanged event , Emitter<SignupState> emit)
+  {
+    emit(state.copyWith(name:event.name,),);
+  }
+
+
+
+  Future<void> _signupApi(SignupApi event, Emitter<SignupState> emit) async {
+    emit(
+      state.copyWith(
+        signupStatus: SignupStatus.loading,
+      ),
+    );
+    Map data = {'email': state.email, 'password': state.password,'name':state.name};
+
+    final api = Api();
+
+    try {
+      final response = await  api.dio.post("http://10.0.2.2:8080/auth/createuser",data:data);
+      var data1 = response.data;
+      if (response.statusCode== 2 ||response.statusCode==201) {
+        emit(
+          state.copyWith(
+            signupStatus: SignupStatus.success,
+            message: 'signup successful',
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            signupStatus: SignupStatus.error,
+            message: response.data['error'] ?? 'signup failed',
+          ),
+        );
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(
+          signupStatus: SignupStatus.error,
+          message: e.toString(),
+        ),
+      );
+    }
+  }
+
 }

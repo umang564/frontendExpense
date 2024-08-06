@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutterproject/feature/dio.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
+final storage = FlutterSecureStorage();
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(const LoginState()) {
@@ -42,12 +44,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final response = await  api.dio.post("http://10.0.2.2:8080/auth/login",data:data);
       var data1 = response.data;
       if (response.statusCode == 200) {
-        emit(
-          state.copyWith(
-            loginStatus: LoginStatus.success,
-            message: 'Login successful',
-          ),
-        );
+        String? token = data1['token'];
+
+
+        if (token != null) {
+          // Save the token securely
+          await storage.write(key: 'token', value: token);
+
+          emit(
+            state.copyWith(
+              loginStatus: LoginStatus.success,
+              message: 'Login successful',
+            ),
+          );
+        } else {
+          emit(
+            state.copyWith(
+              loginStatus: LoginStatus.error,
+              message: 'Token not found',
+            ),
+          );
+        }
       } else {
         emit(
           state.copyWith(
