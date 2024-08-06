@@ -47,6 +47,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     final item = state.grouplist[index];
                     return ListTile(
                       title: Text(item.name.toString()),
+                      trailing: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                            context,
+                            '/group',
+                            arguments: {
+                              'name': item.name.toString(),
+                              'id': item.iD,
+                              'adminId': item.adminID,
+                            },
+                          );
+                        },
+                        child: Text('View Details'),
+
+
+
+                      ),
+
                     );
                   },
                 );
