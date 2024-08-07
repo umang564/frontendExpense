@@ -38,8 +38,37 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
             Text('ID: $id', style: const TextStyle(fontSize: 18)),
             const SizedBox(height: 8),
             Text('Admin ID: $adminId', style: const TextStyle(fontSize: 18)),
+            const SizedBox(height: 16),
+            const Text('Options', style: TextStyle(fontSize: 18)),
+            const Divider(),
+            Expanded(
+              child: ListView(
+                children: const <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.people),
+                    title: Text('Add member'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.currency_exchange),
+                    title: Text('Add expense'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.group),
+                    title: Text('View members'),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Define your action here
+          // For example, you can navigate to another screen or open a dialog
+        },
+        child: const Icon(Icons.add),
+        tooltip: 'Add new',
       ),
     );
   }

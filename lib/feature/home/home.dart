@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (_) => _homeBloc,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Home Screen'),
+          title: const Text('Groups List'),
         ),
         body: BlocBuilder<HomeBloc, GroupState>(
           builder: (context, state) {
@@ -59,12 +59,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           );
                         },
-                        child: Text('View Details'),
-
-
-
+                        child: const Text('View Details'),
                       ),
-
                     );
                   },
                 );
@@ -72,6 +68,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 return const Center(child: Text('Unexpected state'));
             }
           },
+        ),
+        floatingActionButton: Container(
+          width: 150.0,  // Set the desired width
+          height: 50.0,
+          child: FloatingActionButton(
+            onPressed: () {
+              // Define the action to create a group
+              // For example, navigate to a group creation screen
+              Navigator.pushNamed(context, '/createGroup');
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(9.0),
+              child: Text(
+                'Create Group',
+                style: TextStyle(fontSize: 15), // Adjust font size as needed
+                textAlign: TextAlign.center, // Center the text within the button
+              ),
+            ),
+            tooltip: 'Create Group',
+          ),
         ),
       ),
     );

@@ -12,6 +12,7 @@ class Api {
         cookieJar = CookieJar() {
     dio.interceptors.add(CookieManager(cookieJar));
     dio.interceptors.add(
+
       LogInterceptor(
         request: true,
         requestHeader: true,

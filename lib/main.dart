@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/feature/CreateGroup/CreateGroup.dart';
 import 'package:flutterproject/feature/GroupPage/Group.dart';
 import 'package:flutterproject/feature/home/home.dart';
 import 'package:flutterproject/screens/app.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/group':(context)=>GroupDetailScreen(),
+        '/createGroup':(context)=>CreateGroupScreen(),
       }, // Home widget where your main app content resides
     );
   }
