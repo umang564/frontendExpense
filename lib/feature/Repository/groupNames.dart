@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutterproject/feature/model/groupModel.dart';
 
-
 final api = Api();
 
 class GroupRepository {
@@ -32,7 +31,12 @@ class GroupRepository {
 
       if (response.statusCode == 200) {
         try {
-          return (response.data['group_users'] as List)
+          // Check if 'group_users' is null and return an empty list if it is
+          final groupUsers = response.data['group_users'];
+          if (groupUsers == null) {
+            return [];
+          }
+          return (groupUsers as List)
               .map((x) => GroupModel.fromJson(x))
               .toList();
         } catch (e) {

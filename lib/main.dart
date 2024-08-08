@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterproject/feature/AddMember/addMember.dart';
 import 'package:flutterproject/feature/CreateGroup/CreateGroup.dart';
 import 'package:flutterproject/feature/GroupPage/Group.dart';
 import 'package:flutterproject/feature/home/home.dart';
@@ -27,10 +28,12 @@ class MyApp extends StatelessWidget {
 
       initialRoute: '/',
       routes: {
-        '/': (context) => LoginScreen(),
+        '/': (context) => SignUpScreen(),
+        '/login':(context)=>LoginScreen(),
         '/home': (context) => HomeScreen(),
         '/group':(context)=>GroupDetailScreen(),
         '/createGroup':(context)=>CreateGroupScreen(),
+        '/addMember':(context)=>AddMemberScreen(),
       }, // Home widget where your main app content resides
     );
   }

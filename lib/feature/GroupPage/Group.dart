@@ -43,10 +43,24 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
             const Divider(),
             Expanded(
               child: ListView(
-                children: const <Widget>[
+                children:  <Widget>[
                   ListTile(
                     leading: Icon(Icons.people),
                     title: Text('Add member'),
+                    trailing: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/addMember',
+                          arguments: {
+                            'name': name,
+                            'id': id,
+                            'adminId': adminId,
+                          },
+                        );
+                      },
+                      child: Icon(Icons.add),
+                    ),
                   ),
                   ListTile(
                     leading: Icon(Icons.currency_exchange),

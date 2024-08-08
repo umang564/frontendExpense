@@ -69,7 +69,7 @@ class _LoginScreenState extends State<SignUpScreen> {
                       const SnackBar(content: Text('signup successful')),
 
                     );
-                  Navigator.pushNamed(context, '/home');
+                  Navigator.pushNamed(context, '/login');
                 }
               },
               child: Column(
@@ -150,10 +150,28 @@ class _LoginScreenState extends State<SignUpScreen> {
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
                                 context.read<SignupBloc>().add(SignupApi());
+
                               }
                             },
                             child: state.signupStatus == SignupStatus.loading ? CircularProgressIndicator() : const Text('Sign Up'));
-                      })
+                      }),
+
+                 const SizedBox(
+                    height: 50,
+                  ),
+
+                  BlocBuilder<SignupBloc,SignupState>(
+                    builder: (context,state){
+                      return ElevatedButton(onPressed: (){
+                        Navigator.pushNamed(context, '/login');
+                      }, child: Text("all ready a user"));
+                    },
+
+
+                  ),
+
+
+
                 ],
               ),
             ),
