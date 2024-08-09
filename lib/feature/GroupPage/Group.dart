@@ -65,10 +65,39 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                   ListTile(
                     leading: Icon(Icons.currency_exchange),
                     title: Text('Add expense'),
+                    trailing: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/addExpense',
+                          arguments: {
+                            'name': name,
+                            'id': id,
+                            'adminId': adminId,
+                          },
+                        );
+                      },
+                      child: Icon(Icons.add),
+                    ),
                   ),
                   ListTile(
                     leading: Icon(Icons.group),
                     title: Text('View members'),
+                    trailing: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/viewMember',
+                          arguments: {
+                            'name': name,
+                            'id': id,
+                            'adminId': adminId,
+                          },
+                        );
+                      },
+                      child: Icon(Icons.add),
+                    ),
+
                   ),
                 ],
               ),
