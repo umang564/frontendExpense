@@ -69,7 +69,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                       onPressed: () {
                         Navigator.pushNamed(
                           context,
-                          '/addExpense',
+                          '/addexpense',
                           arguments: {
                             'name': name,
                             'id': id,

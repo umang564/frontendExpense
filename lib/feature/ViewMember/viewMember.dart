@@ -54,7 +54,7 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
       child: Scaffold(
         appBar: AppBar(
 
-          title: const Text("Member list"),
+          title: const Text("Members & exchange"),
         ),
         body: BlocBuilder<ViewMemberBloc, ViewMemberState>(
           builder: (context, state) {
@@ -76,13 +76,24 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
                             context,
                             '/settlement',
                             arguments: {
-                              'name': item.name.toString(),
-                              'id': item.iD,
-                              'email': item.email,
+                              'member_name': item.name.toString(),
+                              'member_id': item.iD,
+                              'member_email': item.email,
+                              'Group_Id':id,
+                              'Admin_Id':adminId,
                             },
                           );
                         },
-                        child: const Text('Settlement'),
+                        child:Row(
+                          mainAxisSize: MainAxisSize.min, // Adjusts the Row to wrap its children
+                          children: const [
+                            Icon(Icons.currency_rupee),
+
+                            SizedBox(width: 6),
+                            Text('Exchange'),// Adds some space between the Text and Icon
+
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -104,7 +115,7 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
             child: const Padding(
               padding: EdgeInsets.all(9.0),
               child: Text(
-                'Create Group',
+                'Summary of group',
                 style: TextStyle(fontSize: 15), // Adjust font size as needed
                 textAlign: TextAlign.center, // Center the text within the button
               ),
