@@ -82,7 +82,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                   ),
                   ListTile(
                     leading: Icon(Icons.group),
-                    title: Text('View members'),
+                    title: Text('Members & Exchange'),
                     trailing: ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(

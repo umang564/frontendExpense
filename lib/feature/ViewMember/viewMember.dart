@@ -74,7 +74,7 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
                         onPressed: () {
                           Navigator.pushNamed(
                             context,
-                            '/settlement',
+                            '/exchange',
                             arguments: {
                               'member_name': item.name.toString(),
                               'member_id': item.iD,

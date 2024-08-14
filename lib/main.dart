@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/feature/AddMember/addMember.dart';
 import 'package:flutterproject/feature/CreateGroup/CreateGroup.dart';
+import 'package:flutterproject/feature/Exchange/exchange.dart';
 import 'package:flutterproject/feature/GroupPage/Group.dart';
 import 'package:flutterproject/feature/ViewMember/viewMember.dart';
 import 'package:flutterproject/feature/home/home.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
 
       initialRoute: '/',
       routes: {
@@ -37,7 +39,8 @@ class MyApp extends StatelessWidget {
         '/createGroup':(context)=>CreateGroupScreen(),
         '/addMember':(context)=>AddMemberScreen(),
         '/viewMember':(context)=>ViewMemberScreen(),
-        '/addexpense':(context)=>AddExpenseScreen()
+        '/addexpense':(context)=>AddExpenseScreen(),
+        '/exchange':(context)=>ExchangeScreen(),
       }, // Home widget where your main app content resides
     );
   }

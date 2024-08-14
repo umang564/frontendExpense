@@ -47,65 +47,66 @@ class _LoginScreenState extends State<SignUpScreen> {
       ),
       body: BlocProvider(
         create: (_) => _signupBloc,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: BlocListener<SignupBloc, SignupState>(
-              listenWhen: (previous, current) => current.signupStatus != previous.signupStatus,
-              listener: (context, state) {
-                if (state.signupStatus == SignupStatus.error) {
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(
-                      SnackBar(content: Text(state.message.toString())),
-                    );
-                }
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              key: _formKey,
+              child: BlocListener<SignupBloc, SignupState>(
+                listenWhen: (previous, current) =>
+                current.signupStatus != previous.signupStatus,
+                listener: (context, state) {
+                  if (state.signupStatus == SignupStatus.error) {
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(content: Text(state.message.toString())),
+                      );
+                  }
 
-                if (state.signupStatus == SignupStatus.success) {
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(
-                      const SnackBar(content: Text('signup successful')),
-
-                    );
-                  Navigator.pushNamed(context, '/login');
-                }
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  BlocBuilder<SignupBloc, SignupState>(
-                      buildWhen: (current, previous) => current.name  != previous.name,
+                  if (state.signupStatus == SignupStatus.success) {
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                          const SnackBar(content: Text('Signup successful')));
+                    Navigator.pushNamed(context, '/login');
+                  }
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    BlocBuilder<SignupBloc, SignupState>(
+                      buildWhen: (current, previous) => current.name != previous.name,
                       builder: (context, state) {
                         return TextFormField(
                           keyboardType: TextInputType.text,
                           focusNode: nameFocusNode,
-                          decoration: const InputDecoration(hintText: 'name', border: OutlineInputBorder()),
+                          decoration: const InputDecoration(
+                              hintText: 'Name', border: OutlineInputBorder()),
                           onChanged: (value) {
                             context.read<SignupBloc>().add(NameChanged(name: value));
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'enter name';
+                              return 'Enter name';
                             }
                             return null;
                           },
                           onFieldSubmitted: (value) {},
                         );
-                      }),
-                  const SizedBox(
-                    height: 20,
-                  ),
-
-                  BlocBuilder<SignupBloc, SignupState>(
-                      buildWhen: (current, previous) => current.email != previous.email,
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    BlocBuilder<SignupBloc, SignupState>(
+                      buildWhen: (current, previous) =>
+                      current.email != previous.email,
                       builder: (context, state) {
                         return TextFormField(
                           keyboardType: TextInputType.emailAddress,
                           focusNode: emailFocusNode,
-                          decoration: const InputDecoration(hintText: 'Email', border: OutlineInputBorder()),
+                          decoration: const InputDecoration(
+                              hintText: 'Email', border: OutlineInputBorder()),
                           onChanged: (value) {
                             context.read<SignupBloc>().add(EmailChanged(email: value));
                           },
@@ -117,17 +118,18 @@ class _LoginScreenState extends State<SignUpScreen> {
                           },
                           onFieldSubmitted: (value) {},
                         );
-                      }),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  BlocBuilder<SignupBloc, SignupState>(
-                      buildWhen: (current, previous) => current.password != previous.password,
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    BlocBuilder<SignupBloc, SignupState>(
+                      buildWhen: (current, previous) =>
+                      current.password != previous.password,
                       builder: (context, state) {
                         return TextFormField(
                           keyboardType: TextInputType.text,
                           focusNode: passwordFocusNode,
-                          decoration: const InputDecoration(hintText: 'Password', border: OutlineInputBorder()),
+                          decoration: const InputDecoration(
+                              hintText: 'Password', border: OutlineInputBorder()),
                           onChanged: (value) {
                             context.read<SignupBloc>().add(PasswordChanged(password: value));
                           },
@@ -139,40 +141,38 @@ class _LoginScreenState extends State<SignUpScreen> {
                           },
                           onFieldSubmitted: (value) {},
                         );
-                      }),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  BlocBuilder<SignupBloc, SignupState>(
-                      buildWhen: (current, previous) => current.signupStatus != previous.signupStatus,
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    BlocBuilder<SignupBloc, SignupState>(
+                      buildWhen: (current, previous) =>
+                      current.signupStatus != previous.signupStatus,
                       builder: (context, state) {
                         return ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                context.read<SignupBloc>().add(SignupApi());
-
-                              }
-                            },
-                            child: state.signupStatus == SignupStatus.loading ? CircularProgressIndicator() : const Text('Sign Up'));
-                      }),
-
-                 const SizedBox(
-                    height: 50,
-                  ),
-
-                  BlocBuilder<SignupBloc,SignupState>(
-                    builder: (context,state){
-                      return ElevatedButton(onPressed: (){
-                        Navigator.pushNamed(context, '/login');
-                      }, child: Text("all ready a user"));
-                    },
-
-
-                  ),
-
-
-
-                ],
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<SignupBloc>().add(SignupApi());
+                            }
+                          },
+                          child: state.signupStatus == SignupStatus.loading
+                              ? CircularProgressIndicator()
+                              : const Text('Sign Up'),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    BlocBuilder<SignupBloc, SignupState>(
+                      builder: (context, state) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/login');
+                          },
+                          child: Text("Already a user"),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -180,4 +180,5 @@ class _LoginScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
 }
