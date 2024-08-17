@@ -8,10 +8,10 @@ class ExchangeState extends Equatable {
   final int groupId;
   final List<MoneyExchangeModel> exchangeList;
   final String message;
-  final ExchangeStatus exchangeStatus;
+   ExchangeStatus exchangeStatus;
   final int totalAmount;
 
-  const ExchangeState({
+   ExchangeState({
     this.exchangeStatus = ExchangeStatus.loading,
     this.exchangeList = const <MoneyExchangeModel>[],
     this.groupId = 0,

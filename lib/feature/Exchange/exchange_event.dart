@@ -45,6 +45,12 @@ class GroupIdChanged extends ExchangeEvent {
 class FetchExchangeApi extends ExchangeEvent {
   // No additional properties required for this event
 }
+class WholeSettledApi extends ExchangeEvent{
+
+}
+
+
+class  NotifyMember extends ExchangeEvent{}
 class SettledApi extends  ExchangeEvent{
 
   final int debitID;

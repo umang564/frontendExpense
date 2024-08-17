@@ -24,18 +24,13 @@ class _LoginScreenState extends State<LoginScreen> {
     _loginBlocs = LoginBloc();
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _loginBlocs.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
+        automaticallyImplyLeading: false,
       ),
       body: BlocProvider(
         create: (_) => _loginBlocs,
@@ -113,17 +108,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(
                     height: 50,
                   ),
-                  BlocBuilder<LoginBloc, LoginState>(
-                      buildWhen: (current, previous) => current.loginStatus != previous.loginStatus,
-                      builder: (context, state) {
-                        return ElevatedButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                context.read<LoginBloc>().add(LoginApi());
-                              }
-                            },
-                            child: state.loginStatus == LoginStatus.loading ? CircularProgressIndicator() : const Text('Login'));
-                      })
+                  Row(
+                    children: [
+                      BlocBuilder<LoginBloc, LoginState>(
+                          buildWhen: (current, previous) => current.loginStatus != previous.loginStatus,
+                          builder: (context, state) {
+                            return ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    context.read<LoginBloc>().add(LoginApi());
+                                  }
+                                },
+                                child: state.loginStatus == LoginStatus.loading ? CircularProgressIndicator() : const Text('Login'));
+                          }),
+                      Spacer(),
+                      ElevatedButton(onPressed: (){
+                        Navigator.pushNamed(context, '/');
+
+                      }, child: Text("Register"))
+                    ],
+                  )
                 ],
               ),
             ),

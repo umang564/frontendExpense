@@ -14,6 +14,7 @@ import 'package:flutterproject/feature/login/login.dart';
 import 'package:flutterproject/feature/signup/signup.dart';
 import 'package:flutterproject/feature/GroupPage/Group.dart';
 import 'package:flutterproject/feature/AddExpense/addexpense.dart';
+import 'package:flutterproject/feature/GroupDetails/Groupdetails.dart';
 
 
 void main() {
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/viewMember':(context)=>ViewMemberScreen(),
         '/addexpense':(context)=>AddExpenseScreen(),
         '/exchange':(context)=>ExchangeScreen(),
+        '/details' :(context)=>GroupdetailsScreen()
       }, // Home widget where your main app content resides
     );
   }

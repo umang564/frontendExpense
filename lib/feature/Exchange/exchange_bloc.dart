@@ -18,6 +18,8 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     on<MemberIdChanged>(_onMemberIdChanged);
     on<FetchExchangeApi>(_onFetchExchangedApi);
     on<SettledApi>(_onSettledApi);
+    on<WholeSettledApi>(_onWholeSettleApi);
+
   }
 
   void _onGroupIdChanged(GroupIdChanged event, Emitter<ExchangeState> emit) {
@@ -36,17 +38,107 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     emit(state.copyWith(memberId: event.memberId));
   }
 
-   Future<void>_onSettledApi(SettledApi event, Emitter<ExchangeState>emit)async{
+
+
+Future<void>_onWholeSettleApi(WholeSettledApi event ,Emitter<ExchangeState>emit)async{
+  final api = Api();
+  final storage = FlutterSecureStorage();
+  final token = await storage.read(key: 'token');
+
+  if (token == null) {
+    emit(state.copyWith(
+      exchangeStatus: ExchangeStatus.error,
+      message: "Token not found",
+    ));
+    return;
+  }
+
+  print('Retrieved token: $token');
+  int groupid=state.groupId;
+  int memberid=state.memberId;
+  try {
+    final response = await api.dio.delete(
+      "http://10.0.2.2:8080/user/allsettle?groupid=$groupid&memberid=$memberid",
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    print('Response data: ${response.data}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.success,
+        message: "Successfully deleted debit entry",
+      ));
+    } else {
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.error,
+        message: "Failed to delete debit entry: ${response.statusMessage}",
+      ));
+    }
+  } catch (e) {
+    emit(state.copyWith(
+      exchangeStatus: ExchangeStatus.error,
+      message: "Exception occurred while deleting debit entry: ${e.toString()}",
+    ));
+  }
+}
 
 
 
 
 
+  Future<void> _onSettledApi(SettledApi event, Emitter<ExchangeState> emit) async {
+    emit(state.copyWith(exchangeStatus: ExchangeStatus.loading));
+    final api = Api();
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
 
+    if (token == null) {
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.error,
+        message: "Token not found",
+      ));
+      return;
+    }
 
+    print('Retrieved token: $token');
+    try {
+      final response = await api.dio.delete(
+        "http://10.0.2.2:8080/user/settleddebit",
+        data: {'DebitId': event.debitID, "MemberID": state.memberId},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
 
+      print('Response data: ${response.data}');
 
-   }
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        emit(state.copyWith(
+          exchangeStatus: ExchangeStatus.success,
+          message: "Successfully deleted debit entry",
+        ));
+      } else {
+        emit(state.copyWith(
+          exchangeStatus: ExchangeStatus.error,
+          message: "Failed to delete debit entry: ${response.statusMessage}",
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.error,
+        message: "Exception occurred while deleting debit entry: ${e.toString()}",
+      ));
+    }
+  }
 
 
 
@@ -85,7 +177,7 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
         ),
       );
 
-      print('Response data: ${response.data}');
+      
 
       if (response.statusCode == 200) {
         final totalAmount = response.data['data']["TotalAmount"] ?? 0;

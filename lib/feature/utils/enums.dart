@@ -9,3 +9,4 @@ enum ViewMemberStatus{ loading ,success ,faiure  }
 enum ExchangeStatus {intial ,loading , success,error,failure}
 
 enum AddExpenseStatus{initial, loading, success, error }
+enum  Details{loading,success,error}

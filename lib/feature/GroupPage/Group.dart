@@ -35,12 +35,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ID: $id', style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 8),
-            Text('Admin ID: $adminId', style: const TextStyle(fontSize: 18)),
-            const SizedBox(height: 16),
-            const Text('Options', style: TextStyle(fontSize: 18)),
-            const Divider(),
+
             Expanded(
               child: ListView(
                 children:  <Widget>[
@@ -95,7 +90,46 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                           },
                         );
                       },
-                      child: Icon(Icons.add),
+                      child: Icon(Icons.search),
+                    ),
+
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.group),
+                    title: Text('Group Details'),
+                    trailing: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/details',
+                          arguments: {
+                            'name': name,
+                            'id': id,
+                            'adminId': adminId,
+                          },
+                        );
+                      },
+                      child: Icon(Icons.details),
+                    ),
+
+
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.group),
+                    title: Text('Delete group'),
+                    trailing: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/delete',
+                          arguments: {
+                            'name': name,
+                            'id': id,
+                            'adminId': adminId,
+                          },
+                        );
+                      },
+                      child: Icon(Icons.delete),
                     ),
 
                   ),

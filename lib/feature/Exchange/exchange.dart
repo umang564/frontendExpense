@@ -55,6 +55,66 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
         ),
         body: Column(
           children: [
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0), // Add padding around the icon
+                  child: Icon(Icons.balance),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0), // Add padding around the text
+                  child: BlocBuilder<ExchangeBloc, ExchangeState>(
+                    builder: (context, state) {
+                      return Text("balance = ${state.totalAmount}");
+                    },
+                  ),
+                ),
+                Spacer(), // Pushes the button to the right
+                
+                  BlocBuilder<ExchangeBloc, ExchangeState>(
+          builder: (context, state) {
+            if(state.totalAmount>0) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                // Add padding around the button
+                child: ElevatedButton(
+                  onPressed: () {
+                    context.read<ExchangeBloc>().add(NotifyMember());
+                    // Add your button action here
+                  },
+                  child: const Text('Notify'),
+                ),
+              );
+            }else if(state.totalAmount==0){
+              return Padding(padding: const EdgeInsets.all(8.0),
+
+              child: Text("all clear"),
+
+              );
+            }else{
+              return Padding(padding: const EdgeInsets.all(8.0),
+
+                child: ElevatedButton(
+                  onPressed: () {
+                    state.exchangeStatus=ExchangeStatus.loading;
+                    context.read<ExchangeBloc>().add(WholeSettledApi());
+                    context.read<ExchangeBloc>().stream.firstWhere((state) => state.exchangeStatus == ExchangeStatus.success).then((_) {
+                      context.read<ExchangeBloc>().add(FetchExchangeApi());
+                    });
+                    // Add your button action here
+                  },
+                  child: const Text('settled'),
+                ),
+
+              );
+            }
+  },
+),
+
+              ],
+            ),
+
+
             Expanded(
               child: BlocBuilder<ExchangeBloc, ExchangeState>(
                 builder: (context, state) {
@@ -73,15 +133,21 @@ class _ExchangeScreenState extends State<ExchangeScreen> {
                             subtitle: Text(item.description.toString()),
                             trailing: ElevatedButton(
                               onPressed: () {
-                      context.read<ExchangeBloc>().add(SettledApi(debitID:item.debitId??0, Category: item.category.toString(), Amount: item.exchangeAmount??0, Description: item.description??"", ExpenseID: item.expenseId??0));
-                      context.read<ExchangeBloc>().add(FetchExchangeApi());
+                                state.exchangeStatus=ExchangeStatus.loading;
+                                context.read<ExchangeBloc>().add(SettledApi(debitID: item.debitId ?? 0, Category: item.category.toString(), Amount: item.exchangeAmount ?? 0, Description: item.description ?? "", ExpenseID: item.expenseId ?? 0));
+
+
+                                context.read<ExchangeBloc>().stream.firstWhere((state) => state.exchangeStatus == ExchangeStatus.success).then((_) {
+                                  context.read<ExchangeBloc>().add(FetchExchangeApi());
+                                });
                               },
+
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: const [
                                   Icon(Icons.delete),
                                   SizedBox(width: 6),
-                                  Text('Settled '),
+                                  Text('Settle'),
                                 ],
                               ),
                             ),

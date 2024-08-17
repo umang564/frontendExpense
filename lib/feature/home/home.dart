@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutterproject/feature/home/home_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterproject/feature/utils/enums.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -19,11 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _homeBloc = HomeBloc()..add(GroupFetched()); // Initialize and trigger the event
   }
 
-  @override
-  void dispose() {
-    _homeBloc.close();
-    super.dispose();
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,20 @@ class _HomeScreenState extends State<HomeScreen> {
       create: (_) => _homeBloc,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Groups List'),
+          title: Row(
+            children: [
+              const Text('Groups List'),
+          Spacer(),
+              ElevatedButton(onPressed :()async
+                  {
+                  final storage = FlutterSecureStorage();
+                  await storage.delete(key: 'token');
+                  Navigator.pushNamed(context, '/login');
+
+                  }, child: Text("Log out"))
+            ],
+          ),
+          automaticallyImplyLeading: false,
         ),
         body: BlocBuilder<HomeBloc, GroupState>(
           builder: (context, state) {

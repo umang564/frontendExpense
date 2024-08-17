@@ -79,7 +79,7 @@ late AddExpenseBloc _addExpenseBloc;
                         ..showSnackBar(
                           const SnackBar(content: Text('Expense added successfully')),
                         );
-                      Navigator.pushNamed(context, '/home');
+                      Navigator.pop(context);
                     }
                   },
                   child: Column(

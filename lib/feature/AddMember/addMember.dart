@@ -86,7 +86,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           context.read<AddMemberBloc>().add(GroupIdChanged(group_id: id));
                           context.read<AddMemberBloc>().add(AddmemberApi());
 
-                          Navigator.pushNamed(context, '/home');
+                          Navigator.pop(context);
                         }
                       },
                       child: const Text('Add memberer'),

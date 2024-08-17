@@ -44,6 +44,7 @@ class _LoginScreenState extends State<SignUpScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register'),
+        automaticallyImplyLeading: false,
       ),
       body: BlocProvider(
         create: (_) => _signupBloc,
@@ -111,11 +112,19 @@ class _LoginScreenState extends State<SignUpScreen> {
                             context.read<SignupBloc>().add(EmailChanged(email: value));
                           },
                           validator: (value) {
-                            if (value!.isEmpty) {
+                            if (value == null || value.isEmpty) {
                               return 'Enter email';
+                            }
+                            // Regular expression for email validation
+                            final RegExp emailRegex = RegExp(
+                              r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                            );
+                            if (!emailRegex.hasMatch(value)) {
+                              return 'Enter a valid email';
                             }
                             return null;
                           },
+
                           onFieldSubmitted: (value) {},
                         );
                       },
