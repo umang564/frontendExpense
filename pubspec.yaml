@@ -37,6 +37,9 @@ dependencies:
   flutter_secure_storage:
   dio_cookie_manager:
   cookie_jar:
+  pdf:
+  printing:
+
     
 
   dio: ^5.2.1

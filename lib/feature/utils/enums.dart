@@ -10,3 +10,4 @@ enum ExchangeStatus {intial ,loading , success,error,failure}
 
 enum AddExpenseStatus{initial, loading, success, error }
 enum  Details{loading,success,error}
+enum DeleteStatus { initial, loading, success }

@@ -50,6 +50,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Add member in '),
+
         ),
         body: BlocBuilder<AddMemberBloc, AddMemberState>(
           builder: (context, state) {

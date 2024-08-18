@@ -19,6 +19,7 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     on<FetchExchangeApi>(_onFetchExchangedApi);
     on<SettledApi>(_onSettledApi);
     on<WholeSettledApi>(_onWholeSettleApi);
+    on<NotifyMember>(_onNotifyMember);
 
   }
 
@@ -38,6 +39,56 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     emit(state.copyWith(memberId: event.memberId));
   }
 
+
+
+Future<void>_onNotifyMember(NotifyMember event,Emitter<ExchangeState>emit)async{
+  final api = Api();
+  final storage = FlutterSecureStorage();
+  final token = await storage.read(key: 'token');
+
+  if (token == null) {
+    emit(state.copyWith(
+      exchangeStatus: ExchangeStatus.error,
+      message: "Token not found",
+    ));
+    return;
+  }
+
+  print('Retrieved token: $token');
+
+  try {
+    final response = await api.dio.post(
+      "http://10.0.2.2:8080/user/notify",
+      data: {"Member_id":state.memberId,"Total_amount":state.totalAmount},
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
+
+    print('Response data: ${response.data}');
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.success,
+        message: "Successfully notified",
+      ));
+    } else {
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.error,
+        message: "Failed to notify: ${response.statusMessage}",
+      ));
+    }
+  } catch (e) {
+    emit(state.copyWith(
+      exchangeStatus: ExchangeStatus.error,
+      message: "Exception occurred while notify: ${e.toString()}",
+    ));
+  }
+
+}
 
 
 Future<void>_onWholeSettleApi(WholeSettledApi event ,Emitter<ExchangeState>emit)async{

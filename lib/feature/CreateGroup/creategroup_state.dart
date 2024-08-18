@@ -3,13 +3,13 @@
 
 
 class CreategroupState extends Equatable {
- const CreategroupState({
+  CreategroupState({
   this.groupName = '',
   this.message = '',
   this.createGroupStatus = CreateGroupStatus.intial,
  });
 
- final String groupName;
+  String groupName;
  final String message;
  final CreateGroupStatus createGroupStatus;
 

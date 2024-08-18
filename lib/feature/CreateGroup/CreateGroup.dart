@@ -37,6 +37,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Create Group'),
+          automaticallyImplyLeading: false,
         ),
         body: BlocBuilder<CreategroupBloc, CreategroupState>(
           builder: (context, state) {
@@ -72,7 +73,11 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           context.read<CreategroupBloc>().add(CreateGroupApi());
-                            Navigator.pushNamed(context, '/home');
+                          if(state.createGroupStatus==CreateGroupStatus.success){
+                            Navigator.pushNamed(context, '/createGroup');
+                          }
+
+
                         }
                       },
                       child: const Text('Create Group'),
@@ -86,6 +91,9 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                         return const SizedBox.shrink();
                       },
                     ),
+                    ElevatedButton(onPressed: (){
+                      Navigator.pushNamed(context, '/home');
+                    }, child: Text("move to home screen"))
                   ],
                 ),
               ),

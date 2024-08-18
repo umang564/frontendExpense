@@ -1,6 +1,21 @@
 part of 'group_bloc.dart';
 
 @immutable
-sealed class GroupState {}
+ class GroupState extends Equatable {
+  final DeleteStatus deleteStatus;
 
-final class GroupInitial extends GroupState {}
+  const GroupState({
+    this.deleteStatus = DeleteStatus.initial,
+  });
+
+  GroupState copyWith({
+    DeleteStatus? deleteStatus,
+  }) {
+    return GroupState(
+      deleteStatus: deleteStatus ?? this.deleteStatus,
+    );
+  }
+
+  @override
+  List<Object?> get props => [deleteStatus];
+}

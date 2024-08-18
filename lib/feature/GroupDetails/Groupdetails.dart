@@ -55,7 +55,7 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
       child: Scaffold(
         appBar: AppBar(
 
-          title: const Text("Members & exchange"),
+          title: const Text("Expense history"),
         ),
         body: BlocBuilder<GroupDetailsBloc, GroupDetailsState>(
           builder: (context, state) {
