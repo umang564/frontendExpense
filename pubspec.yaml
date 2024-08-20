@@ -39,6 +39,13 @@ dependencies:
   cookie_jar:
   pdf:
   printing:
+  screenshot:
+  path_provider:
+  open_file:
+  csv:
+  permission_handler:
+  file_saver:
+
 
     
 

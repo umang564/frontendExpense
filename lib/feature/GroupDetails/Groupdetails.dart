@@ -81,26 +81,8 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
             }
           },
         ),
-        floatingActionButton: Container(
-          width: 150.0,  // Set the desired width
-          height: 50.0,
-          child: FloatingActionButton(
-            onPressed: () {
-              // Define the action to create a group
-              // For example, navigate to a group creation screen
-              Navigator.pushNamed(context, '/Summary');
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(9.0),
-              child: Text(
-                'Summary of group',
-                style: TextStyle(fontSize: 15), // Adjust font size as needed
-                textAlign: TextAlign.center, // Center the text within the button
-              ),
-            ),
-            tooltip: 'Summary',
-          ),
-        ),
+
+
       ),
     );
   }
