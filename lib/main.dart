@@ -43,7 +43,8 @@ class MyApp extends StatelessWidget {
         '/viewMember':(context)=>ViewMemberScreen(),
         '/addexpense':(context)=>AddExpenseScreen(),
         '/exchange':(context)=>ExchangeScreen(),
-        '/details' :(context)=>GroupdetailsScreen()
+        '/details' :(context)=>GroupdetailsScreen(),
+        '/csv':(context)=>CsvGeneratorPage()
       }, // Home widget where your main app content resides
     );
   }

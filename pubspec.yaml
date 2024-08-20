@@ -45,6 +45,7 @@ dependencies:
   csv:
   permission_handler:
   file_saver:
+  share_plus:
 
 
     

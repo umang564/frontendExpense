@@ -22,7 +22,7 @@ class ExchangeBloc extends Bloc<ExchangeEvent, ExchangeState> {
     on<NotifyMember>(_onNotifyMember);
 
   }
-
+ 
   void _onGroupIdChanged(GroupIdChanged event, Emitter<ExchangeState> emit) {
     emit(state.copyWith(groupId: event.groupId));
   }

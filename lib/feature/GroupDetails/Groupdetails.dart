@@ -3,16 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterproject/feature/utils/enums.dart';
 import 'package:flutterproject/feature/GroupDetails/group_details_bloc.dart';
 
-
 class GroupdetailsScreen extends StatefulWidget {
-  const GroupdetailsScreen({super.key});
+  const GroupdetailsScreen({Key? key}) : super(key: key);
 
   @override
   State<GroupdetailsScreen> createState() => _GroupdetailsScreenState();
 }
 
 class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
-  late  GroupDetailsBloc _groupDetailsBloc;
+  late GroupDetailsBloc _groupDetailsBloc;
   late String name;
   late int id;
   late int adminId;
@@ -20,7 +19,7 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _groupDetailsBloc = GroupDetailsBloc();// Initialize and trigger the event
+    _groupDetailsBloc = GroupDetailsBloc(); // Initialize and trigger the event
   }
 
   @override
@@ -39,14 +38,8 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
     name = args['name'] as String;
     id = args['id'] as int;
     adminId = args['adminId'] as int;
-    _groupDetailsBloc..add(FetchDetails(
-        group_id: id));
-
+    _groupDetailsBloc.add(FetchDetails(group_id: id));
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,35 +47,51 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
       create: (_) => _groupDetailsBloc,
       child: Scaffold(
         appBar: AppBar(
-
           title: const Text("Expense history"),
         ),
-        body: BlocBuilder<GroupDetailsBloc, GroupDetailsState>(
-          builder: (context, state) {
-            switch (state.details) {
-              case Details.loading:
-                return const Center(child: CircularProgressIndicator());
-              case Details.error:
-                return Center(child: Text(state.message));
-              case Details.success:
-                return ListView.builder(
-                  itemCount: state.detaillist.length,
-                  itemBuilder: (context, index) {
-                    final item = state.detaillist[index];
-                    return ListTile(
-                      title: Text(item.category.toString()),
-                      subtitle: Text(   "Given by ="+ item.givenByName.toString() +"\n"+"description =" +item.description.toString()),
-                      trailing: Text(item.amount.toString()),
-                    );
-                  },
-                );
-              default:
-                return const Center(child: Text('Unexpected state'));
-            }
-          },
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: BlocBuilder<GroupDetailsBloc, GroupDetailsState>(
+                builder: (context, state) {
+                  switch (state.details) {
+                    case Details.loading:
+                      return const Center(child: CircularProgressIndicator());
+                    case Details.error:
+                      return Center(child: Text(state.message));
+                    case Details.success:
+                      return state.detaillist.isEmpty
+                          ? const Center(child: Text('No details available'))
+                          : ListView.builder(
+                        itemCount: state.detaillist.length,
+                        itemBuilder: (context, index) {
+                          final item = state.detaillist[index];
+                          return ListTile(
+                            title: Text(item.category.toString()),
+                            subtitle: Text("Given by = " + item.givenByName.toString() + "\n" + "Description = " + item.description.toString()),
+                            trailing: Text(item.amount.toString()),
+                          );
+                        },
+                      );
+                    default:
+                      return const Center(child: Text('Unexpected state'));
+                  }
+                },
+              ),
+            ),
+          ],
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/csv');
 
-
+            //N Define the action to be taken when the button is pressed
+            // You can navigate to another screen or perform any other action
+          },
+          child: const Icon(Icons.add),
+          tooltip: 'Add New Item',
+        ),
       ),
     );
   }
