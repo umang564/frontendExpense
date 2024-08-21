@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutterproject/feature/model/moneyExchangeModel.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 
 final api = Api();
@@ -22,7 +23,7 @@ class EXchangeRepository {
 
     try {
       final response = await api.dio.get(
-        "http://10.0.2.2:8080/user/exchange?member_id=$member_id&group_id=$group_id",
+        "$BASE_URL/user/exchange?member_id=$member_id&group_id=$group_id",
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',

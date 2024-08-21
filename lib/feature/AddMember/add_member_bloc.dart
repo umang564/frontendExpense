@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 part 'add_member_event.dart';
 part 'add_member_state.dart';
@@ -44,7 +45,7 @@ void _onGroupIdChanged(GroupIdChanged event, Emitter<AddMemberState>emit){
  try {
    int id= state.group_id;
    final response = await api.dio.post(
-     "http://10.0.2.2:8080/user/addmember?id=$id",
+     "$BASE_URL/user/addmember?id=$id",
      data: {'Email': state.member_name},
      options: Options(
        headers: {

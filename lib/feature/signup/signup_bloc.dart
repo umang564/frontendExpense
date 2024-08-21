@@ -3,9 +3,11 @@ import 'dart:ffi';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutterproject/feature/dio.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 part 'signup_event.dart';
 part 'signup_state.dart';
+
 
 class SignupBloc extends Bloc<SignupEvent, SignupState> {
   SignupBloc() : super(SignupState()) {
@@ -45,7 +47,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
     final api = Api();
 
     try {
-      final response = await  api.dio.post("http://10.0.2.2:8080/auth/createuser",data:data);
+      final response = await  api.dio.post("$BASE_URL/auth/createuser",data:data);
       var data1 = response.data;
       if (response.statusCode== 2 ||response.statusCode==201) {
         emit(

@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutterproject/feature/utils/enums.dart';
 import 'package:flutterproject/feature/model/viewMemberModel.dart';
 import 'package:flutterproject/feature/Repository/viewMember.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 part 'view_member_event.dart';
 part 'view_member_state.dart';

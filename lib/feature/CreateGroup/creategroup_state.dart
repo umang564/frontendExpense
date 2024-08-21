@@ -11,7 +11,7 @@ class CreategroupState extends Equatable {
 
   String groupName;
  final String message;
- final CreateGroupStatus createGroupStatus;
+  CreateGroupStatus createGroupStatus;
 
  // CopyWith method for creating a new state with modified values
  CreategroupState copyWith({

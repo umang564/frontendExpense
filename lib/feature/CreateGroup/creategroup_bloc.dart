@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:dio/dio.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 part 'creategroup_event.dart';
 part 'creategroup_state.dart';
@@ -38,7 +39,7 @@ class CreategroupBloc extends Bloc<CreategroupEvent, CreategroupState> {
 
     try {
       final response = await api.dio.post(
-        "http://10.0.2.2:8080/user/creategroup",
+        "$BASE_URL/user/creategroup",
         data: {'Name': state.groupName},
         options: Options(
           headers: {

@@ -6,6 +6,7 @@ import 'package:flutterproject/feature/utils/enums.dart';
 import 'package:dio/dio.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 part 'exchange_event.dart';
 part 'exchange_state.dart';
@@ -58,7 +59,7 @@ Future<void>_onNotifyMember(NotifyMember event,Emitter<ExchangeState>emit)async{
 
   try {
     final response = await api.dio.post(
-      "http://10.0.2.2:8080/user/notify",
+      "$BASE_URL/user/notify",
       data: {"Member_id":state.memberId,"Total_amount":state.totalAmount},
       options: Options(
         headers: {
@@ -109,7 +110,7 @@ Future<void>_onWholeSettleApi(WholeSettledApi event ,Emitter<ExchangeState>emit)
   int memberid=state.memberId;
   try {
     final response = await api.dio.delete(
-      "http://10.0.2.2:8080/user/allsettle?groupid=$groupid&memberid=$memberid",
+      "$BASE_URL/user/allsettle?groupid=$groupid&memberid=$memberid",
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',
@@ -160,7 +161,7 @@ Future<void>_onWholeSettleApi(WholeSettledApi event ,Emitter<ExchangeState>emit)
     print('Retrieved token: $token');
     try {
       final response = await api.dio.delete(
-        "http://10.0.2.2:8080/user/settleddebit",
+        "$BASE_URL/user/settleddebit",
         data: {'DebitId': event.debitID, "MemberID": state.memberId},
         options: Options(
           headers: {
@@ -219,7 +220,7 @@ Future<void>_onWholeSettleApi(WholeSettledApi event ,Emitter<ExchangeState>emit)
     print('Retrieved token: $token');
     try {
       final response = await api.dio.get(
-        "http://10.0.2.2:8080/user/exchange?member_id=${state.memberId}&group_id=${state.groupId}",
+        "$BASE_URL/user/exchange?member_id=${state.memberId}&group_id=${state.groupId}",
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',

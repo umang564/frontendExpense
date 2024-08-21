@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 part 'add_expense_event.dart';
 part 'add_expense_state.dart';
@@ -84,7 +85,7 @@ Future<void>_onExpenseApi(ExpenseApi event ,Emitter<AddExpenseState>emit )async{
 
   try {
     final response = await api.dio.post(
-      "http://10.0.2.2:8080/user/addmoney?id=$id",
+      "$BASE_URL/user/addmoney?id=$id",
       data: {'GivenByEmail': state.givenBy,'Amount':state.amount,'Category':state.category,'Description':state.description},
       options: Options(
         headers: {

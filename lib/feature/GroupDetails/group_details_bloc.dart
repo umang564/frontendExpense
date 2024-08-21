@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 part 'group_details_event.dart';
 part 'group_details_state.dart';
@@ -33,7 +34,7 @@ class GroupDetailsBloc extends Bloc<GroupDetailsEvent, GroupDetailsState> {
     print('Retrieved token: $token');
     try {
       final response = await api.dio.get(
-        "http://10.0.2.2:8080/user/groupDetails?groupid=${event.group_id}",
+        "$BASE_URL/user/groupDetails?groupid=${event.group_id}",
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',

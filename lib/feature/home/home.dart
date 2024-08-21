@@ -20,8 +20,6 @@ class _HomeScreenState extends State<HomeScreen> {
     _homeBloc = HomeBloc()..add(GroupFetched()); // Initialize and trigger the event
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -30,15 +28,20 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: AppBar(
           title: Row(
             children: [
-              const Text('Groups List'),
-          Spacer(),
-              ElevatedButton(onPressed :()async
-                  {
+              Row(
+                children: [Icon(Icons.list),
+                  const Text(' Groups List'),
+                ],
+              ),
+              Spacer(),
+              ElevatedButton(
+                onPressed: () async {
                   final storage = FlutterSecureStorage();
                   await storage.delete(key: 'token');
                   Navigator.pushNamed(context, '/login');
-
-                  }, child: Text("Log out"))
+                },
+                child: const Text("Log out"),
+              ),
             ],
           ),
           automaticallyImplyLeading: false,
@@ -51,6 +54,12 @@ class _HomeScreenState extends State<HomeScreen> {
               case GroupStatus.failure:
                 return Center(child: Text(state.message));
               case GroupStatus.success:
+                if (state.grouplist.isEmpty) {
+                  return const Center(child: Text('you are not in any group', style: TextStyle(
+                    fontSize: 15.0, // Set the desired font size here
+                    fontWeight: FontWeight.bold, // Optionally, make the text bold
+                  ),));
+                }
                 return ListView.builder(
                   itemCount: state.grouplist.length,
                   itemBuilder: (context, index) {
@@ -79,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           },
         ),
-        floatingActionButton: Container(
+        floatingActionButton: SizedBox(
           width: 150.0,  // Set the desired width
           height: 50.0,
           child: FloatingActionButton(

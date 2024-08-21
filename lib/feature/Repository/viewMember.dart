@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutterproject/feature/model/viewMemberModel.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 
 final api = Api();
@@ -19,7 +20,7 @@ Future<List<ViewMemberModel>> fetchMemberGroup({required int id}) async{
 
   try {
     final response = await api.dio.get(
-      "http://10.0.2.2:8080/user/viewmember?id=$id",
+      "$BASE_URL/user/viewmember?id=$id",
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',

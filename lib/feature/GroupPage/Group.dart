@@ -49,6 +49,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   Expanded(
                     child: ListView(
                       children: <Widget>[

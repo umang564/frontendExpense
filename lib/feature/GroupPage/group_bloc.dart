@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterproject/feature/utils/enums.dart';
+import 'package:flutterproject/feature/constant.dart';
 
 
 part 'group_event.dart';
@@ -31,7 +32,7 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
 int x= event.groupid;
 
       final response = await api.dio.delete(
-        "http://10.0.2.2:8080/user/deleteGroup?groupid=$x",
+        "$BASE_URL/user/deleteGroup?groupid=$x",
 
         options: Options(
           headers: {
