@@ -16,11 +16,13 @@ import 'package:flutterproject/feature/GroupPage/Group.dart';
 import 'package:flutterproject/feature/AddExpense/addexpense.dart';
 import 'package:flutterproject/feature/GroupDetails/Groupdetails.dart';
 import 'package:flutterproject/feature/GroupDetails/csv.dart';
+import 'package:flutterproject/feature/CurrentUser/currentuser_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 void main() {
   runApp(
-       MyApp(),
+    MyApp(),
   );
 }
 
@@ -29,23 +31,26 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
+    return BlocProvider(
+      create: (context) => CurrentuserBloc(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
 
-      initialRoute: '/',
-      routes: {
-        '/': (context) => SignUpScreen(),
-        '/login':(context)=>LoginScreen(),
-        '/home': (context) => HomeScreen(),
-        '/group':(context)=>GroupDetailScreen(),
-        '/createGroup':(context)=>CreateGroupScreen(),
-        '/addMember':(context)=>AddMemberScreen(),
-        '/viewMember':(context)=>ViewMemberScreen(),
-        '/addexpense':(context)=>AddExpenseScreen(),
-        '/exchange':(context)=>ExchangeScreen(),
-        '/details' :(context)=>GroupdetailsScreen(),
-        '/csv':(context)=>CsvGeneratorPage()
-      }, // Home widget where your main app content resides
+        initialRoute: '/',
+        routes: {
+          '/': (context) => SignUpScreen(),
+          '/login': (context) => LoginScreen(),
+          '/home': (context) => HomeScreen(),
+          '/group': (context) => GroupDetailScreen(),
+          '/createGroup': (context) => CreateGroupScreen(),
+          '/addMember': (context) => AddMemberScreen(),
+          '/viewMember': (context) => ViewMemberScreen(),
+          '/addexpense': (context) => AddExpenseScreen(),
+          '/exchange': (context) => ExchangeScreen(),
+          '/details': (context) => GroupdetailsScreen(),
+          '/csv': (context) => CsvGeneratorPage()
+        }, // Home widget where your main app content resides
+      ),
     );
   }
 }

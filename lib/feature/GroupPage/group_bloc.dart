@@ -22,6 +22,21 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
     final api = Api();
     final storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token');
+ String? y = await storage.read(key: 'current_user_id');
+
+ int? currentUserId;
+
+ if (y != null && y.isNotEmpty) {
+   currentUserId = int.tryParse(y);
+   emit(state.copyWith(current_user_id: currentUserId));
+ }
+
+ if (currentUserId != null) {
+   print('Current user ID: $currentUserId');
+ } else {
+   print('Failed to parse user ID or ID is not set.');
+ }
+
 
     if (token == null) {
       print(" token not found");

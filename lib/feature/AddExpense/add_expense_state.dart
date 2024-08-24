@@ -10,6 +10,8 @@ class AddExpenseState extends Equatable {
     this.message = '',
     this.addExpenseStatus = AddExpenseStatus.initial,
     this. groupId=0,
+    this.memberlist=const <ViewMemberModel>[],
+    this.selectedMemberIds=const [],
   });
 
   final String givenBy;
@@ -19,6 +21,8 @@ class AddExpenseState extends Equatable {
   final AddExpenseStatus addExpenseStatus;
   final String message;
   final int groupId;
+  final List<ViewMemberModel> memberlist;
+  final  List<int> selectedMemberIds;
 
   AddExpenseState copyWith({
     String? givenBy,
@@ -28,6 +32,9 @@ class AddExpenseState extends Equatable {
     AddExpenseStatus? addExpenseStatus,
     String? message,
     int?    groupId,
+    List<ViewMemberModel>? memberlist,
+    List<int>? selectedMemberIds
+
   }) {
     return AddExpenseState(
       givenBy: givenBy ?? this.givenBy,
@@ -37,6 +44,8 @@ class AddExpenseState extends Equatable {
       addExpenseStatus: addExpenseStatus ?? this.addExpenseStatus,
       message: message ?? this.message,
       groupId: groupId ?? this.groupId,
+      memberlist: memberlist ?? this.memberlist,
+      selectedMemberIds: selectedMemberIds ?? this.selectedMemberIds,
     );
   }
 
@@ -48,6 +57,8 @@ class AddExpenseState extends Equatable {
     description,
     addExpenseStatus,
     message,
-    groupId
+    groupId,
+    memberlist,
+    selectedMemberIds
   ];
 }

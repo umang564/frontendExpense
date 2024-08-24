@@ -63,5 +63,15 @@ class GroupIdChanged extends AddExpenseEvent{
   List<Object> get props => [GroupId];
 
 }
+class MembersSelected extends AddExpenseEvent {
+  const MembersSelected({required this.selectedMemberIds});
+
+  final List<int> selectedMemberIds;
+
+  @override
+  List<Object> get props => [selectedMemberIds];
+}
+
 
 class  ExpenseApi extends AddExpenseEvent{}
+class MemberFetched extends AddExpenseEvent{}

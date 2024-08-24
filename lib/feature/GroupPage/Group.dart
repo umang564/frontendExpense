@@ -101,6 +101,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                                   'name': name,
                                   'id': id,
                                   'adminId': adminId,
+                                  'userId':state.current_user_id
                                 },
                               );
                             },

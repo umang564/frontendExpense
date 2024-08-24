@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterproject/feature/utils/enums.dart';
 import 'package:flutterproject/feature/ViewMember/view_member_bloc.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ViewMemberScreen extends StatefulWidget {
   const ViewMemberScreen({super.key});
@@ -16,11 +16,13 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
   late String name;
   late int id;
   late int adminId;
+  late String? x;
+  late int userId;
 
   @override
   void initState() {
     super.initState();
-    _viewMemberBloc = ViewMemberBloc();// Initialize and trigger the event
+    _viewMemberBloc = ViewMemberBloc(); // Initialize and trigger the event
   }
 
   @override
@@ -34,18 +36,15 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
     super.didChangeDependencies();
     // Extract arguments from the ModalRoute
     final Map<String, dynamic> args =
-    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     name = args['name'] as String;
     id = args['id'] as int;
     adminId = args['adminId'] as int;
+    userId = args['userId'] as int;
     _viewMemberBloc..add(GroupIdChanged(group_id: id));
     _viewMemberBloc..add(MemberFetched());
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,6 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
       create: (_) => _viewMemberBloc,
       child: Scaffold(
         appBar: AppBar(
-
           title: const Text("Members & exchange"),
         ),
         body: BlocBuilder<ViewMemberBloc, ViewMemberState>(
@@ -68,33 +66,38 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
                   itemCount: state.memberlist.length,
                   itemBuilder: (context, index) {
                     final item = state.memberlist[index];
+                    print("current user id");
+                    print(state.current_user_id);
                     return ListTile(
                       title: Text(item.name.toString()),
-                      trailing: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/exchange',
-                            arguments: {
-                              'member_name': item.name.toString(),
-                              'member_id': item.iD,
-                              'member_email': item.email,
-                              'Group_Id':id,
-                              'Admin_Id':adminId,
-                            },
-                          );
-                        },
-                        child:Row(
-                          mainAxisSize: MainAxisSize.min, // Adjusts the Row to wrap its children
-                          children: const [
-                            Icon(Icons.currency_rupee),
+                      trailing: item.iD == state.current_user_id
+                          ? null
+                          : ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/exchange',
+                                  arguments: {
+                                    'member_name': item.name.toString(),
+                                    'member_id': item.iD,
+                                    'member_email': item.email,
+                                    'Group_Id': id,
+                                    'Admin_Id': adminId,
+                                  },
+                                );
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize
+                                    .min, // Adjusts the Row to wrap its children
+                                children: const [
+                                  Icon(Icons.currency_rupee),
 
-                            SizedBox(width: 6),
-                            Text('Exchange'),// Adds some space between the Text and Icon
-
-                          ],
-                        ),
-                      ),
+                                  SizedBox(width: 6),
+                                  Text(
+                                      'Exchange'), // Adds some space between the Text and Icon
+                                ],
+                              ),
+                            ),
                     );
                   },
                 );
@@ -104,7 +107,7 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
           },
         ),
         floatingActionButton: Container(
-          width: 150.0,  // Set the desired width
+          width: 150.0, // Set the desired width
           height: 50.0,
           child: FloatingActionButton(
             onPressed: () {
@@ -117,7 +120,8 @@ class _ViewMemberScreenState extends State<ViewMemberScreen> {
               child: Text(
                 'Summary of group',
                 style: TextStyle(fontSize: 15), // Adjust font size as needed
-                textAlign: TextAlign.center, // Center the text within the button
+                textAlign:
+                    TextAlign.center, // Center the text within the button
               ),
             ),
             tooltip: 'Summary',

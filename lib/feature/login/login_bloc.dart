@@ -46,11 +46,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       var data1 = response.data;
       if (response.statusCode == 200) {
         String? token = data1['token'];
+        int   id=     data1['id'];
+        String  name=    data1['name'];
 
 
         if (token != null) {
           // Save the token securely
           await storage.write(key: 'token', value: token);
+          await storage.write(key:'current_user_id',value:id.toString());
+          await storage.write(key: 'name', value: name);
 
           emit(
             state.copyWith(

@@ -6,6 +6,8 @@ import 'package:flutterproject/feature/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutterproject/feature/constant.dart';
+import 'package:flutterproject/feature/Repository/viewMember.dart';
+import 'package:flutterproject/feature/model/viewMemberModel.dart';
 
 part 'add_expense_event.dart';
 part 'add_expense_state.dart';
@@ -18,6 +20,8 @@ class AddExpenseBloc extends Bloc<AddExpenseEvent, AddExpenseState> {
     on<AmountChanged>(_onAmountChanged);
     on<CategoryChanged>(_onCategoryChanged);
     on<ExpenseApi>(_onExpenseApi);
+    on<MemberFetched>(_onMemberFetched);
+    on<MembersSelected>(_onMemberSelected);
   }
 
   void _onGivenByChanged(GivenByChanged event ,Emitter<AddExpenseState>emit){
@@ -26,7 +30,9 @@ state.copyWith(
   givenBy:event.GivenByEmail
 ));
   }
-
+void _onMemberSelected(MembersSelected event,Emitter<AddExpenseState>emit){
+emit(state.copyWith(selectedMemberIds:event.selectedMemberIds ));
+}
 
   void _onDescriptionChanged(DescriptionChanged event,Emitter<AddExpenseState>emit){
 
@@ -82,11 +88,13 @@ Future<void>_onExpenseApi(ExpenseApi event ,Emitter<AddExpenseState>emit )async{
 
   print('Retrieved token: $token');
    int id =state.groupId;
+   print(state.selectedMemberIds);
+
 
   try {
     final response = await api.dio.post(
       "$BASE_URL/user/addmoney?id=$id",
-      data: {'GivenByEmail': state.givenBy,'Amount':state.amount,'Category':state.category,'Description':state.description},
+      data: {'GivenByEmail': state.givenBy,'Amount':state.amount,'Category':state.category,'Description':state.description ,'MemberIDs':state.selectedMemberIds},
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',
@@ -116,4 +124,24 @@ Future<void>_onExpenseApi(ExpenseApi event ,Emitter<AddExpenseState>emit )async{
   }
 
 }
+  Future<void>_onMemberFetched(MemberFetched event ,Emitter<AddExpenseState>emit)async{
+    emit(state.copyWith(addExpenseStatus: AddExpenseStatus.loading));
+    try {
+      // Await the result of fetchGroupName
+      final memberList = await ViewRepository().fetchMemberGroup(id: state.groupId);
+      // Ensure that the emit is called after the future completes
+      emit(state.copyWith(
+        addExpenseStatus: AddExpenseStatus.initial,
+        message: 'successful fetching of api',
+        memberlist: memberList,
+      ));
+    } catch (error) {
+
+      // Handle the error and emit the failure state
+      emit(state.copyWith(
+        addExpenseStatus: AddExpenseStatus.error,
+        message: error.toString(),
+      ));
+    }
+  }
 }
