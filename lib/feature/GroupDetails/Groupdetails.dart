@@ -36,12 +36,14 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
     super.dispose();
   }
 
+  //umang////
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Extract arguments from the ModalRoute
     final Map<String, dynamic> args =
-    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     name = args['name'] as String;
     id = args['id'] as int;
@@ -87,7 +89,8 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
     // Check if the Download directory exists, and create it if it doesn't
     Directory downloadDir = Directory(downloadPath);
     if (!await downloadDir.exists()) {
-      await downloadDir.create(recursive: true); // Creates the directory if it doesn't exist
+      await downloadDir.create(
+          recursive: true); // Creates the directory if it doesn't exist
     }
 
     // Define the file path for saving the report.csv
@@ -181,20 +184,20 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
                       return state.detaillist.isEmpty
                           ? const Center(child: Text('No details available'))
                           : ListView.builder(
-                        itemCount: state.detaillist.length,
-                        itemBuilder: (context, index) {
-                          final item = state.detaillist[index];
-                          return ListTile(
-                            title: Text(item.category.toString()),
-                            subtitle: Text("Given by = " +
-                                item.givenByName.toString() +
-                                "\n" +
-                                "Description = " +
-                                item.description.toString()),
-                            trailing: Text(item.amount.toString()),
-                          );
-                        },
-                      );
+                              itemCount: state.detaillist.length,
+                              itemBuilder: (context, index) {
+                                final item = state.detaillist[index];
+                                return ListTile(
+                                  title: Text(item.category.toString()),
+                                  subtitle: Text("Given by = " +
+                                      item.givenByName.toString() +
+                                      "\n" +
+                                      "Description = " +
+                                      item.description.toString()),
+                                  trailing: Text(item.amount.toString()),
+                                );
+                              },
+                            );
                     default:
                       return const Center(child: Text('Unexpected state'));
                   }
@@ -205,7 +208,8 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/csv'); // Navigate to CSV-related screen or action
+            Navigator.pushNamed(
+                context, '/csv'); // Navigate to CSV-related screen or action
           },
           child: const Icon(Icons.add),
           tooltip: 'Add New Item',
