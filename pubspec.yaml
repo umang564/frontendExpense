@@ -47,7 +47,6 @@ dependencies:
   file_saver:
   share_plus:
   multiselect:
-  aws_s3_client:
   url_launcher:
 
 
