@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:csv/csv.dart';
 import 'package:flutterproject/feature/constant.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class GroupdetailsScreen extends StatefulWidget {
   const GroupdetailsScreen({Key? key}) : super(key: key);
@@ -43,12 +44,16 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
     super.didChangeDependencies();
     // Extract arguments from the ModalRoute
     final Map<String, dynamic> args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    ModalRoute
+        .of(context)!
+        .settings
+        .arguments as Map<String, dynamic>;
 
     name = args['name'] as String;
     id = args['id'] as int;
     adminId = args['adminId'] as int;
     _groupDetailsBloc.add(FetchDetails(group_id: id));
+    _groupDetailsBloc.add(GetCsvFile(group_id: id));
   }
 
   Future<String> _generateCsvAndSave() async {
@@ -146,6 +151,7 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
       return [];
     }
   }
+
   //hi
 
   @override
@@ -158,14 +164,27 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
             children: [
               const Text("Expense history"),
               const Spacer(),
-              ElevatedButton(
-                onPressed: () async {
-                  String filePath = await _generateCsvAndSave();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('CSV saved at: $filePath')),
+              BlocBuilder<GroupDetailsBloc, GroupDetailsState>(
+                builder: (context, state) {
+                  return ElevatedButton(
+                    onPressed: () async {
+                      String url = state.url;
+
+                      if (await canLaunchUrl(Uri.parse(url))) {
+                        await launchUrl(
+                          Uri.parse(url),
+                          mode: LaunchMode
+                              .externalApplication, // Launch in an external application
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Could not launch URL')),
+                        );
+                      }
+                    },
+                    child: Icon(Icons.download),
                   );
                 },
-                child: Icon(Icons.download),
               ),
             ],
           ),
@@ -185,20 +204,20 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
                       return state.detaillist.isEmpty
                           ? const Center(child: Text('No details available'))
                           : ListView.builder(
-                              itemCount: state.detaillist.length,
-                              itemBuilder: (context, index) {
-                                final item = state.detaillist[index];
-                                return ListTile(
-                                  title: Text(item.category.toString()),
-                                  subtitle: Text("Given by = " +
-                                      item.givenByName.toString() +
-                                      "\n" +
-                                      "Description = " +
-                                      item.description.toString()),
-                                  trailing: Text(item.amount.toString()),
-                                );
-                              },
-                            );
+                        itemCount: state.detaillist.length,
+                        itemBuilder: (context, index) {
+                          final item = state.detaillist[index];
+                          return ListTile(
+                            title: Text(item.category.toString()),
+                            subtitle: Text("Given by = " +
+                                item.givenByName.toString() +
+                                "\n" +
+                                "Description = " +
+                                item.description.toString()),
+                            trailing: Text(item.amount.toString()),
+                          );
+                        },
+                      );
                     default:
                       return const Center(child: Text('Unexpected state'));
                   }

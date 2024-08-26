@@ -11,3 +11,12 @@ class FetchDetails extends GroupDetailsEvent {
   @override
   List<Object> get props => [group_id];
 }
+class GetCsvFile extends GroupDetailsEvent{
+  GetCsvFile({required this.group_id});
+
+  final int group_id;
+
+  @override
+  List<Object> get props => [group_id];
+
+}

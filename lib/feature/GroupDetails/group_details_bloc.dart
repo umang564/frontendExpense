@@ -14,6 +14,7 @@ part 'group_details_state.dart';
 class GroupDetailsBloc extends Bloc<GroupDetailsEvent, GroupDetailsState> {
   GroupDetailsBloc() : super(GroupDetailsState()) {
     on<FetchDetails>(_onFetchDetails);
+    on<GetCsvFile>(_onGetCsvFile);
   }
 
   Future<void> _onFetchDetails(FetchDetails event, Emitter<GroupDetailsState> emit) async {
@@ -78,5 +79,70 @@ class GroupDetailsBloc extends Bloc<GroupDetailsEvent, GroupDetailsState> {
       ));
     }
   }
+
+  Future<void> _onGetCsvFile(GetCsvFile event, Emitter<GroupDetailsState> emit) async {
+
+
+    final api = Api();
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
+
+    if (token == null) {
+      emit(state.copyWith(
+        details: Details.error,
+        message: 'Token not found',
+      ));
+      return;
+    }
+
+    print('Retrieved token: $token');
+    try {
+      final response = await api.dio.get(
+        "$BASE_URL/user/csvfile?groupid=${event.group_id}"
+        ,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+
+        final url = response.data['url'];
+        emit(state.copyWith(url: url));
+        return;
+
+      } else {
+        emit(state.copyWith(
+          details: Details.error,
+          message: 'Error while fetching exchanges: ${response.statusCode}',
+        ));
+      }
+    } catch (e) {
+      print('DioException: $e');
+      emit(state.copyWith(
+        details: Details.error,
+        message: 'Failed to fetch exchange list',
+      ));
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
