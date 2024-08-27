@@ -193,7 +193,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       ),
                       const SizedBox(height: 20),
                       BlocBuilder<AddExpenseBloc, AddExpenseState>(
-                        buildWhen: (previous,current)=>previous.selectedMemberIds!=current.selectedMemberIds,
+                        buildWhen: (previous,current)=>previous.memberlist!=current.memberlist,
                         builder: (context, state) {
                           return Column(
                             children: [
