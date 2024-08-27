@@ -104,7 +104,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                   .add(GivenByChanged(GivenByEmail: value));
                             },
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value == null || value.isEmpty) {
                                 return 'Enter email';
                               }
                               return null;
@@ -130,7 +130,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                   .add(DescriptionChanged(Description: value));
                             },
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value == null || value.isEmpty) {
                                 return 'Enter description';
                               }
                               return null;
@@ -156,7 +156,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                   .add(CategoryChanged(Category: value));
                             },
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value == null || value.isEmpty) {
                                 return 'Enter category';
                               }
                               return null;
@@ -177,12 +177,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                               border: OutlineInputBorder(),
                             ),
                             onChanged: (value) {
+                              final amount = int.tryParse(value) ?? 0;
                               context
                                   .read<AddExpenseBloc>()
-                                  .add(AmountChanged(Amount: int.parse(value)));
+                                  .add(AmountChanged(Amount: amount));
                             },
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (value == null || value.isEmpty) {
                                 return 'Enter Amount';
                               }
                               return null;
@@ -191,32 +192,12 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         },
                       ),
                       const SizedBox(height: 20),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                       BlocBuilder<AddExpenseBloc, AddExpenseState>(
+                        buildWhen: (previous,current)=>previous.selectedMemberIds!=current.selectedMemberIds,
                         builder: (context, state) {
                           return Column(
                             children: [
-                              // Add Members button
 
-
-                              // Show the CircularProgressIndicator or member list based on state
-                              if (state.addExpenseStatus == AddExpenseStatus.loading)
-                                const CircularProgressIndicator(),
                               if (state.addExpenseStatus == AddExpenseStatus.initial && state.memberlist.isNotEmpty)
                                 DropDownMultiSelect(
                                   options: state.memberlist.map((member) => member.name ?? '').toList(),
@@ -232,13 +213,11 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                       return state.memberlist.firstWhere((member) => member.name == name).iD!;
                                     }).toList();
 
-                                    // Dispatch an event to update the Bloc state
                                     context.read<AddExpenseBloc>().add(
                                       MembersSelected(selectedMemberIds: selectedIds),
                                     );
                                   },
-                                  hint: Text("selected member"),
-
+                                  hint: Text("Select member"),
                                 ),
                               if (state.addExpenseStatus == AddExpenseStatus.error)
                                 const Text('No members available'),
@@ -246,27 +225,6 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           );
                         },
                       ),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                       const SizedBox(height: 20),
                       BlocBuilder<AddExpenseBloc, AddExpenseState>(
                         buildWhen: (previous, current) =>

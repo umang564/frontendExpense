@@ -226,14 +226,7 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(
-                context, '/csv'); // Navigate to CSV-related screen or action
-          },
-          child: const Icon(Icons.add),
-          tooltip: 'Add New Item',
-        ),
+
       ),
     );
   }

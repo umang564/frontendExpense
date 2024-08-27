@@ -42,7 +42,12 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
         appBar: AppBar(
           title: Text(name),
         ),
-        body: BlocBuilder<GroupBloc, GroupState>(
+        body: BlocListener<GroupBloc, GroupState>(
+          listenWhen: (previous,current )=>previous.deleteStatus != current.deleteStatus,
+  listener: (context, state) {
+    Navigator.pushNamed(context, '/home');
+  },
+  child: BlocBuilder<GroupBloc, GroupState>(
           builder: (context, state) {
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -134,9 +139,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
                               context
                                   .read<GroupBloc>()
                                   .add(DeleteGroup(groupid: id));
-                              if(state.deleteStatus==DeleteStatus.success) {
-                                Navigator.pushNamed(context, '/home');
-                              }
+
                             },
                             child: Icon(Icons.delete),
                           ),
@@ -149,6 +152,7 @@ class _GroupDetailScreenState extends State<GroupDetailScreen> {
             );
           },
         ),
+),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             // Define your action here
