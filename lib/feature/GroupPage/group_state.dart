@@ -2,10 +2,10 @@ part of 'group_bloc.dart';
 
 @immutable
  class GroupState extends Equatable {
-  final DeleteStatus deleteStatus;
+ DeleteStatus deleteStatus;
   final int current_user_id;
 
-  const GroupState({
+  GroupState({
     this.deleteStatus = DeleteStatus.initial,
     this.current_user_id=0
   });

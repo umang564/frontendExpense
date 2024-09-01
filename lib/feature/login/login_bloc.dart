@@ -3,9 +3,11 @@ import 'package:equatable/equatable.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutterproject/feature/constant.dart';
+import 'package:dio/dio.dart';
 import 'package:flutterproject/feature/constant.dart';
 part 'login_event.dart';
 part 'login_state.dart';
+
 final storage = FlutterSecureStorage();
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
@@ -79,12 +81,23 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
       }
     } catch (e) {
-      emit(
-        state.copyWith(
+      if (e is DioException) {
+        final errorMessage = e.response?.data['message'] ?? "An unexpected error occurred";
+
+        emit(state.copyWith(
+          loginStatus: LoginStatus.error,
+          message: errorMessage,
+        ));
+
+
+      } else {
+        // Handle other types of exceptions
+        print('Error: $e');
+        emit(state.copyWith(
           loginStatus: LoginStatus.error,
           message: e.toString(),
-        ),
-      );
+        ));
+      }
     }
   }
 }

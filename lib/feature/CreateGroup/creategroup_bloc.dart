@@ -54,19 +54,32 @@ class CreategroupBloc extends Bloc<CreategroupEvent, CreategroupState> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         emit(state.copyWith(
           createGroupStatus: CreateGroupStatus.success,
-          message: "Successfully created group",
+          message: "Successfully Created Group",
         ));
       } else {
         emit(state.copyWith(
           createGroupStatus: CreateGroupStatus.error,
-          message: "Failed to create group: ${response.statusMessage}",
+          message: "Failed to Create Group: ${response.statusMessage}",
         ));
       }
     } catch (e) {
-      emit(state.copyWith(
-        createGroupStatus: CreateGroupStatus.error,
-        message: e.toString(),
-      ));
+      if (e is DioException) {
+        final errorMessage = e.response?.data['message'] ?? "An unexpected error occurred";
+
+        emit(state.copyWith(
+          createGroupStatus: CreateGroupStatus.error,
+          message: errorMessage,
+        ));
+
+
+      } else {
+        // Handle other types of exceptions
+        print('Error: $e');
+        emit(state.copyWith(
+          createGroupStatus: CreateGroupStatus.error,
+          message: e.toString(),
+        ));
+      }
     }
   }
 }

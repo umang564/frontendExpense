@@ -43,8 +43,31 @@ class _LoginScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
-        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blueAccent, // Set the background color of the header
+        elevation: 4.0, // Add some shadow to the header
+        title: Row(
+          children: [
+            Text(
+              'SignUp', // Display the user's name or a default title
+              style: const TextStyle(
+                fontSize: 20.0, // Set the font size
+                fontWeight: FontWeight.bold, // Make the text bold
+                color: Colors.white, // Text color
+              ),
+            ),
+            Spacer(),
+            Text(
+              'Splito', // Display the user's name or a default title
+              style: const TextStyle(
+                fontSize: 20.0, // Set the font size
+                fontWeight: FontWeight.bold, // Make the text bold
+                color: Colors.white, // Text color
+              ),
+            )
+
+
+          ],
+        ),
       ),
       body: BlocProvider(
         create: (_) => _signupBloc,

@@ -36,20 +36,39 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
       create: (context) => _creategroupBloc,
       child: Scaffold(
         appBar: AppBar(
-          title: Row(
-            children: [
-              Icon(Icons.create),
-              const Text(' Create Group'),
-            ],
+          backgroundColor: Colors.blueAccent, // Set the background color of the header
+          elevation: 4.0, // Add some shadow to the header
+          title: Text(
+            'Create Group', // Display the user's name or a default title
+            style: TextStyle(
+              fontSize: 20.0, // Set the font size
+              fontWeight: FontWeight.bold, // Make the text bold
+              color: Colors.white, // Text color
+            ),
           ),
-          automaticallyImplyLeading: false,
+          // Hide the back button if needed
         ),
         body: Column(
           children: [
             BlocListener<CreategroupBloc, CreategroupState>(
               listener: (context, state) {
+
+                if (state.createGroupStatus == CreateGroupStatus.error) {
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      SnackBar(content: Text(state.message.toString())),
+                    );
+                }
+
+
                 if(state.createGroupStatus==CreateGroupStatus.success){
-                  Navigator.pushNamed(context, '/createGroup');
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(content: Text('Group Created Successfully')),
+                    );
+                  Navigator.pushNamed(context, '/home');
 
                 }
               },
@@ -95,6 +114,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                               if (state.createGroupStatus ==
                                   CreateGroupStatus.success) {
 
+
                               }
                             }
                           },
@@ -109,9 +129,7 @@ class _CreateGroupScreenState extends State<CreateGroupScreen> {
                             return const SizedBox.shrink();
                           },
                         ),
-                        ElevatedButton(onPressed: () {
-                          Navigator.pushNamed(context, '/home');
-                        }, child: Text("move to home screen"))
+
                       ],
                     ),
                   ),

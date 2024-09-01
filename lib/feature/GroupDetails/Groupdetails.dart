@@ -37,17 +37,12 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
     super.dispose();
   }
 
-  //umang////
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Extract arguments from the ModalRoute
     final Map<String, dynamic> args =
-    ModalRoute
-        .of(context)!
-        .settings
-        .arguments as Map<String, dynamic>;
+    ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     name = args['name'] as String;
     id = args['id'] as int;
@@ -152,17 +147,22 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
     }
   }
 
-  //hi
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => _groupDetailsBloc,
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.blueAccent, // Set the background color of the header
+          elevation: 4.0,
           title: Row(
             children: [
-              const Text("Expense history"),
+              Text(
+                "Expense history",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
               const Spacer(),
               BlocBuilder<GroupDetailsBloc, GroupDetailsState>(
                 builder: (context, state) {
@@ -189,44 +189,105 @@ class _GroupdetailsScreenState extends State<GroupdetailsScreen> {
             ],
           ),
         ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-              child: BlocBuilder<GroupDetailsBloc, GroupDetailsState>(
-                builder: (context, state) {
-                  switch (state.details) {
-                    case Details.loading:
-                      return const Center(child: CircularProgressIndicator());
-                    case Details.error:
-                      return Center(child: Text(state.message));
-                    case Details.success:
-                      return state.detaillist.isEmpty
-                          ? const Center(child: Text('No details available'))
-                          : ListView.builder(
-                        itemCount: state.detaillist.length,
-                        itemBuilder: (context, index) {
-                          final item = state.detaillist[index];
-                          return ListTile(
-                            title: Text(item.category.toString()),
-                            subtitle: Text("Given by = " +
-                                item.givenByName.toString() +
-                                "\n" +
-                                "Description = " +
-                                item.description.toString()),
-                            trailing: Text(item.amount.toString()),
-                          );
-                        },
-                      );
-                    default:
-                      return const Center(child: Text('Unexpected state'));
-                  }
-                },
-              ),
-            ),
-          ],
-        ),
+        body: BlocBuilder<GroupDetailsBloc, GroupDetailsState>(
+          builder: (context, state) {
+            switch (state.details) {
+              case Details.loading:
+                return const Center(child: CircularProgressIndicator());
+              case Details.error:
+                return Center(child: Text(state.message));
+              case Details.success:
+              // Sort the list in descending order based on createdAt
+                List<dynamic> sortedList = List.from(state.detaillist);
+                sortedList.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
+                return sortedList.isEmpty
+                    ? const Center(child: Text('No details available'))
+                    : GridView.builder(
+                  padding: EdgeInsets.all(16.0),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, // Two cards per row
+                    crossAxisSpacing: 16.0, // Space between columns
+                    mainAxisSpacing: 16.0, // Space between rows
+                    childAspectRatio: 0.8, // Aspect ratio for each card (adjust as needed)
+                  ),
+                  itemCount: sortedList.length,
+                  itemBuilder: (context, index) {
+                    final item = sortedList[index];
+                    return Card(
+                      color: Colors.blue.shade50, // Card color
+                      elevation: 5, // Shadow effect
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.category.toString(),
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    "Given by: ${item.givenByName}",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "Description: ${item.description}",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "Involve User: ${item.involveUser}",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "Created at: ${item.createdAt.substring(0, 10)}",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Text(
+                              "Total Amount: \Rs ${item.amount}",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              default:
+                return const Center(child: Text('Unexpected state'));
+            }
+          },
+        ),
       ),
     );
   }

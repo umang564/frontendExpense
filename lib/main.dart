@@ -18,6 +18,9 @@ import 'package:flutterproject/feature/GroupDetails/Groupdetails.dart';
 import 'package:flutterproject/feature/GroupDetails/csv.dart';
 import 'package:flutterproject/feature/CurrentUser/currentuser_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterproject/feature/Profile.dart';
+import 'package:flutterproject/feature/Settledhistory.dart';
+import 'package:flutterproject/feature/UserExpenseHistory.dart';
 
 
 void main() {
@@ -48,7 +51,10 @@ class MyApp extends StatelessWidget {
           '/addexpense': (context) => AddExpenseScreen(),
           '/exchange': (context) => ExchangeScreen(),
           '/details': (context) => GroupdetailsScreen(),
-          '/csv': (context) => CsvGeneratorPage()
+          '/csv': (context) => CsvGeneratorPage(),
+          '/profile':(context )=>ProfilePage(),
+          '/SettledHistory':(context)=>Settledhistory(),
+          '/expense':(context)=>UserExpenseHistory()
         }, // Home widget where your main app content resides
       ),
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:multiselect/multiselect.dart';
 import 'package:flutterproject/feature/AddExpense/add_expense_bloc.dart';
 import 'package:flutterproject/feature/utils/enums.dart';
-import 'package:multiselect/multiselect.dart';
 import 'package:flutterproject/feature/model/viewMemberModel.dart';
 
 class AddExpenseScreen extends StatefulWidget {
@@ -20,6 +20,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   final categoryFocusNode = FocusNode();
 
   late AddExpenseBloc _addExpenseBloc;
+  String? selectedEmail; // To keep track of the selected email
 
   @override
   void initState() {
@@ -49,7 +50,17 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Expense in $name'),
+        backgroundColor: Colors.blueAccent, // Set the background color of the header
+        elevation: 4.0, // Add some shadow to the header
+        title: Text(
+          'Add Expense', // Display the user's name or a default title
+          style: TextStyle(
+            fontSize: 20.0, // Set the font size
+            fontWeight: FontWeight.bold, // Make the text bold
+            color: Colors.white, // Text color
+          ),
+        ),
+        // Hide the back button if needed
       ),
       body: BlocProvider(
         create: (_) => _addExpenseBloc,
@@ -78,7 +89,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       ScaffoldMessenger.of(context)
                         ..hideCurrentSnackBar()
                         ..showSnackBar(
-                          const SnackBar(content: Text('Expense added successfully')),
+                          const SnackBar(content: Text('Expense Added Successfully')),
                         );
                       Navigator.pop(context);
                     }
@@ -89,23 +100,43 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     children: [
                       BlocBuilder<AddExpenseBloc, AddExpenseState>(
                         buildWhen: (previous, current) =>
-                        current.givenBy != previous.givenBy,
+                        current.memberlist != previous.memberlist,
                         builder: (context, state) {
-                          return TextFormField(
-                            keyboardType: TextInputType.emailAddress,
-                            focusNode: emailFocusNode,
-                            decoration: const InputDecoration(
-                              hintText: 'Email',
-                              border: OutlineInputBorder(),
-                            ),
+                          return DropdownButtonFormField<String>(
+                            value: selectedEmail,
+                            items: state.memberlist.isEmpty
+                                ? [
+                              const DropdownMenuItem<String>(
+                                value: '',
+                                child: Text('No Members Available'),
+                              )
+                            ]
+                                : state.memberlist
+                                .map((member) => DropdownMenuItem<String>(
+                              value: member.email,
+                              child: Text(member.email ?? ''),
+                            ))
+                                .toList(),
                             onChanged: (value) {
-                              context
-                                  .read<AddExpenseBloc>()
-                                  .add(GivenByChanged(GivenByEmail: value));
+                              setState(() {
+                                selectedEmail = value;
+                                context.read<AddExpenseBloc>().add(
+                                  GivenByChanged(GivenByEmail: selectedEmail ?? ''),
+                                );
+                              });
                             },
+                            decoration: InputDecoration(
+                              hintText: 'Select Email',
+                         // Set the background color
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue.shade50), // Border color
+                                borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                              ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0), // Optional: Adjust padding
+                            ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Enter email';
+                                return 'Select an Email';
                               }
                               return null;
                             },
@@ -120,9 +151,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           return TextFormField(
                             keyboardType: TextInputType.text,
                             focusNode: descriptionFocusNode,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               hintText: 'Description',
-                              border: OutlineInputBorder(),
+                            // Set the background color
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue.shade50), // Border color
+                                borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                              ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),  // Optional: Adjust padding
                             ),
                             onChanged: (value) {
                               context
@@ -131,7 +167,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Enter description';
+                                return 'Enter Description';
                               }
                               return null;
                             },
@@ -146,9 +182,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           return TextFormField(
                             keyboardType: TextInputType.text,
                             focusNode: categoryFocusNode,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               hintText: 'Category',
-                              border: OutlineInputBorder(),
+                              // Set the background color
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue.shade50), // Border color
+                                borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                              ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),// Optional: Adjust padding
                             ),
                             onChanged: (value) {
                               context
@@ -157,7 +198,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                             },
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return 'Enter category';
+                                return 'Enter Category';
                               }
                               return null;
                             },
@@ -172,9 +213,15 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                           return TextFormField(
                             keyboardType: TextInputType.number,
                             focusNode: amountFocusNode,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               hintText: 'Amount',
-                              border: OutlineInputBorder(),
+                              // Enable background color
+                              // Set the background color
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue.shade50), // Border color
+                                borderRadius: BorderRadius.circular(8.0), // Rounded corners
+                              ),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0), // Optional: Adjust padding
                             ),
                             onChanged: (value) {
                               final amount = int.tryParse(value) ?? 0;
@@ -186,6 +233,16 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                               if (value == null || value.isEmpty) {
                                 return 'Enter Amount';
                               }
+
+                              final amount = int.tryParse(value);
+                              if (amount == null) {
+                                return 'Enter a valid number';
+                              }
+
+                              if (amount < 0) {
+                                return 'Amount should be positive';
+                              }
+
                               return null;
                             },
                           );
@@ -193,12 +250,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                       ),
                       const SizedBox(height: 20),
                       BlocBuilder<AddExpenseBloc, AddExpenseState>(
-                        buildWhen: (previous,current)=>previous.memberlist!=current.memberlist,
+                        buildWhen: (previous, current) =>
+                        previous.memberlist != current.memberlist ||
+                            previous.selectedMemberIds != current.selectedMemberIds,
                         builder: (context, state) {
                           return Column(
                             children: [
-
-                              if (state.addExpenseStatus == AddExpenseStatus.initial && state.memberlist.isNotEmpty)
+                              if (state.memberlist.isNotEmpty)
                                 DropDownMultiSelect(
                                   options: state.memberlist.map((member) => member.name ?? '').toList(),
                                   selectedValues: state.selectedMemberIds.map((id) {
@@ -210,17 +268,20 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                   }).where((name) => name.isNotEmpty).toList(),
                                   onChanged: (List<String> selectedNames) {
                                     final selectedIds = selectedNames.map((name) {
-                                      return state.memberlist.firstWhere((member) => member.name == name).iD!;
+                                      return state.memberlist.firstWhere(
+                                            (member) => member.name == name,
+                                        orElse: () => ViewMemberModel(iD: null),
+                                      ).iD!;
                                     }).toList();
 
                                     context.read<AddExpenseBloc>().add(
                                       MembersSelected(selectedMemberIds: selectedIds),
                                     );
                                   },
-                                  hint: Text("Select member"),
+                                  hint: Text("Select Members"),
                                 ),
-                              if (state.addExpenseStatus == AddExpenseStatus.error)
-                                const Text('No members available'),
+                              if (state.memberlist.isEmpty)
+                                const Text('No Members Available'),
                             ],
                           );
                         },
@@ -239,9 +300,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                 context.read<AddExpenseBloc>().add(ExpenseApi());
                               }
                             },
-                            child: state.addExpenseStatus == AddExpenseStatus.loading
-                                ? const CircularProgressIndicator()
-                                : const Text('Add expense'),
+                            child: const Text('Add Expense'),
                           );
                         },
                       ),
@@ -254,5 +313,14 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    emailFocusNode.dispose();
+    descriptionFocusNode.dispose();
+    amountFocusNode.dispose();
+    categoryFocusNode.dispose();
+    super.dispose();
   }
 }

@@ -1,2 +1,2 @@
 // constants.dart
-const String BASE_URL = "http://13.201.119.199:8080";
+const String BASE_URL = "http://10.0.2.2:8080";

@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutterproject/feature/dio.dart';
 import 'package:flutterproject/feature/constant.dart';
-
+import 'package:dio/dio.dart';
 part 'signup_event.dart';
 part 'signup_state.dart';
 
@@ -60,17 +60,28 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
         emit(
           state.copyWith(
             signupStatus: SignupStatus.error,
-            message: response.data['error'] ?? 'signup failed',
+            message:  'signup failed',
           ),
         );
       }
     } catch (e) {
-      emit(
-        state.copyWith(
+      if (e is DioException) {
+        final errorMessage = e.response?.data['message'] ?? "An unexpected error occurred";
+
+        emit(state.copyWith(
+          signupStatus: SignupStatus.error,
+          message: errorMessage,
+        ));
+
+
+      } else {
+        // Handle other types of exceptions
+        print('Error: $e');
+        emit(state.copyWith(
           signupStatus: SignupStatus.error,
           message: e.toString(),
-        ),
-      );
+        ));
+      }
     }
   }
 

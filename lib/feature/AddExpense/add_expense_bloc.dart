@@ -81,7 +81,7 @@ Future<void>_onExpenseApi(ExpenseApi event ,Emitter<AddExpenseState>emit )async{
   if (token == null) {
     emit(state.copyWith(
       addExpenseStatus: AddExpenseStatus.error,
-      message: "Token not found",
+      message: "Token not Found",
     ));
     return;
   }
@@ -108,19 +108,32 @@ Future<void>_onExpenseApi(ExpenseApi event ,Emitter<AddExpenseState>emit )async{
     if (response.statusCode == 200 || response.statusCode == 201) {
       emit(state.copyWith(
         addExpenseStatus: AddExpenseStatus.success,
-        message: "Successfully created group",
+        message: "Successfully Created Group",
       ));
     } else {
       emit(state.copyWith(
         addExpenseStatus: AddExpenseStatus.error,
-        message: "Failed to create group: ${response.statusMessage}",
+        message: "Failed to Create Group: ${response.statusMessage}",
       ));
     }
   } catch (e) {
-    emit(state.copyWith(
-      addExpenseStatus: AddExpenseStatus.error,
-      message: e.toString(),
-    ));
+    if (e is DioException) {
+      final errorMessage = e.response?.data['message'] ?? "An unexpected error occurred";
+
+      emit(state.copyWith(
+        addExpenseStatus: AddExpenseStatus.error,
+        message: errorMessage,
+      ));
+
+
+    } else {
+      // Handle other types of exceptions
+      print('Error: $e');
+      emit(state.copyWith(
+        addExpenseStatus: AddExpenseStatus.error,
+        message: e.toString(),
+      ));
+    }
   }
 
 }
@@ -132,16 +145,29 @@ Future<void>_onExpenseApi(ExpenseApi event ,Emitter<AddExpenseState>emit )async{
       // Ensure that the emit is called after the future completes
       emit(state.copyWith(
         addExpenseStatus: AddExpenseStatus.initial,
-        message: 'successful fetching of api',
+        message: 'Successful Fetching Of Api',
         memberlist: memberList,
       ));
-    } catch (error) {
+    } catch (e) {
 
       // Handle the error and emit the failure state
-      emit(state.copyWith(
-        addExpenseStatus: AddExpenseStatus.error,
-        message: error.toString(),
-      ));
+      if (e is DioException) {
+        final errorMessage = e.response?.data['message'] ?? "An unexpected error occurred";
+
+        emit(state.copyWith(
+          addExpenseStatus: AddExpenseStatus.error,
+          message: errorMessage,
+        ));
+
+
+      } else {
+        // Handle other types of exceptions
+        print('Error: $e');
+        emit(state.copyWith(
+          addExpenseStatus: AddExpenseStatus.error,
+          message: e.toString(),
+        ));
+      }
     }
   }
 }

@@ -83,10 +83,23 @@ Future<void>_onNotifyMember(NotifyMember event,Emitter<ExchangeState>emit)async{
       ));
     }
   } catch (e) {
-    emit(state.copyWith(
-      exchangeStatus: ExchangeStatus.error,
-      message: "Exception occurred while notify: ${e.toString()}",
-    ));
+    if (e is DioException) {
+      final errorMessage = e.response?.data['message'] ?? "An unexpected error occurred";
+
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.error,
+        message: errorMessage,
+      ));
+
+
+    } else {
+      // Handle other types of exceptions
+      print('Error: $e');
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.error,
+        message: e.toString(),
+      ));
+    }
   }
 
 }
@@ -133,10 +146,23 @@ Future<void>_onWholeSettleApi(WholeSettledApi event ,Emitter<ExchangeState>emit)
       ));
     }
   } catch (e) {
-    emit(state.copyWith(
-      exchangeStatus: ExchangeStatus.error,
-      message: "Exception occurred while deleting debit entry: ${e.toString()}",
-    ));
+    if (e is DioException) {
+      final errorMessage = e.response?.data['message'] ?? "An unexpected error occurred";
+
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.error,
+        message: errorMessage,
+      ));
+
+
+    } else {
+      // Handle other types of exceptions
+      print('Error: $e');
+      emit(state.copyWith(
+        exchangeStatus: ExchangeStatus.error,
+        message: e.toString(),
+      ));
+    }
   }
 }
 
@@ -259,10 +285,23 @@ Future<void>_onWholeSettleApi(WholeSettledApi event ,Emitter<ExchangeState>emit)
       }
     } catch (e) {
       print('DioException: $e');
-      emit(state.copyWith(
-        exchangeStatus: ExchangeStatus.error,
-        message: 'Failed to fetch exchange list',
-      ));
+      if (e is DioException) {
+        final errorMessage = e.response?.data['message'] ?? "An unexpected error occurred";
+
+        emit(state.copyWith(
+          exchangeStatus: ExchangeStatus.error,
+          message: errorMessage,
+        ));
+
+
+      } else {
+        // Handle other types of exceptions
+        print('Error: $e');
+        emit(state.copyWith(
+          exchangeStatus: ExchangeStatus.error,
+          message: e.toString(),
+        ));
+      }
     }
   }
 }

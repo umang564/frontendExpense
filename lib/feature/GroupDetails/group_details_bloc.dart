@@ -130,19 +130,4 @@ class GroupDetailsBloc extends Bloc<GroupDetailsEvent, GroupDetailsState> {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

@@ -26,53 +26,66 @@ void _onGroupIdChanged(GroupIdChanged event, Emitter<AddMemberState>emit){
     emit(state.copyWith(group_id: event.group_id));
 }
 
-  Future<void>_onAddmemberApi (AddmemberApi event ,Emitter<AddMemberState> emit)async{
- emit(state.copyWith(addMemberStatus: AddMemberStatus.loading));
- final api = Api();
- final storage = FlutterSecureStorage();
- final token = await storage.read(key: 'token');
+  Future<void> _onAddmemberApi(AddmemberApi event, Emitter<AddMemberState> emit) async {
+    emit(state.copyWith(addMemberStatus: AddMemberStatus.loading));
 
- if (token == null) {
-   emit(state.copyWith(
-       addMemberStatus: AddMemberStatus.error,
-     message: "Token not found",
-   ));
-   return;
- }
+    final api = Api();
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'token');
 
- print('Retrieved token: $token');
+    if (token == null) {
+      emit(state.copyWith(
+        addMemberStatus: AddMemberStatus.error,
+        message: "Token Not Found",
+      ));
+      return;
+    }
 
- try {
-   int id= state.group_id;
-   final response = await api.dio.post(
-     "$BASE_URL/user/addmember?id=$id",
-     data: {'Email': state.member_name},
-     options: Options(
-       headers: {
-         'Authorization': 'Bearer $token',
-         'Content-Type': 'application/json',
-       },
-     ),
-   );
+    print('Retrieved token: $token');
 
-   print('Response data: ${response.data}');
+    try {
+      int id = state.group_id;
+      final response = await api.dio.post(
+        "$BASE_URL/user/addmember?id=$id",
+        data: {'Email': state.member_name},
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
 
-   if (response.statusCode == 200 || response.statusCode == 201) {
-     emit(state.copyWith(
-       addMemberStatus: AddMemberStatus.success,
-       message: "Successfully created group",
-     ));
-   } else {
-     emit(state.copyWith(
-       addMemberStatus: AddMemberStatus.error,
-       message: "Failed to create group: ${response.statusMessage}",
-     ));
-   }
- } catch (e) {
-   emit(state.copyWith(
-     addMemberStatus: AddMemberStatus.error,
-     message: e.toString(),
-   ));
- }
+      print('Response Data: ${response.data}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        emit(state.copyWith(
+          addMemberStatus: AddMemberStatus.success,
+          message: "Successfully Created Group",
+        ));
+      } else if (response.statusCode == 400) {
+        emit(state.copyWith(
+          addMemberStatus: AddMemberStatus.error,
+          message: response.data["message"] ?? "Bad Request",
+        ));
+      } else if (response.statusCode == 500) {
+        emit(state.copyWith(
+          addMemberStatus: AddMemberStatus.error,
+          message: response.data["message"] ?? "Internal Server Error",
+        ));
+      } else {
+        emit(state.copyWith(
+          addMemberStatus: AddMemberStatus.error,
+          message: "Unexpected Error: ${response.statusCode}",
+        ));
+      }
+    } catch (e) {
+      print('Error: $e'); // Log the error for debugging
+      emit(state.copyWith(
+        addMemberStatus: AddMemberStatus.error,
+        message: e.toString(),
+      ));
+    }
   }
+
 }
