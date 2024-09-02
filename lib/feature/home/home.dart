@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
+          selectedItemColor: Colors.blueAccent,
           onTap: _onItemTapped, // Call the function when a tab is tapped
         ),
         body: BlocBuilder<HomeBloc, GroupState>(

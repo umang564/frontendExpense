@@ -37,18 +37,18 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 4.0,
         title: Row(
           children: [
-            Text(
+            const Text(
               'Login',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
             ),
-            Spacer(),
-            Text(
+            const Spacer(),
+            const Text(
               'Splito',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -59,65 +59,70 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: BlocProvider(
         create: (_) => _loginBlocs,
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child: Form(
-            key: _formKey,
-            child: BlocListener<LoginBloc, LoginState>(
-              listenWhen: (previous, current) => current.loginStatus != previous.loginStatus,
-              listener: (context, state) {
-                if (state.loginStatus == LoginStatus.error) {
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(
-                      SnackBar(content: Text(state.message.toString())),
-                    );
-                }
+          child: Center(
+            child: Form(
+              key: _formKey,
+              child: BlocListener<LoginBloc, LoginState>(
+                listenWhen: (previous, current) =>
+                current.loginStatus != previous.loginStatus,
+                listener: (context, state) {
+                  if (state.loginStatus == LoginStatus.error) {
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(content: Text(state.message.toString())),
+                      );
+                  }
 
-                if (state.loginStatus == LoginStatus.success) {
-                  ScaffoldMessenger.of(context)
-                    ..hideCurrentSnackBar()
-                    ..showSnackBar(
-                      const SnackBar(content: Text('Login successful')),
-                    );
-                  Navigator.pushNamed(context, '/home');
-                }
-              },
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Splito',
-                        style: TextStyle(
-                          color: Colors.blue.shade500, // Apply blue color (shades of blue)
-                          fontSize: 24.0, // Make the font size bigger
-                          fontWeight: FontWeight.bold, // Make the text bold
-                          fontStyle: FontStyle.italic, // Make the text italic
+                  if (state.loginStatus == LoginStatus.success) {
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        const SnackBar(content: Text('Login successful')),
+                      );
+                    Navigator.pushNamed(context, '/home');
+                  }
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Splito',
+                          style: TextStyle(
+                            color: Colors.blue.shade500,
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: 8.0), // Add some spacing between text and icon
-                      Icon(
-                        Icons.call_split,
-                        color: Colors.blue.shade500, // Apply the same color as the text
-                        size: 30.0, // Increase the size of the icon
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 30), // Space between title and form
-
-                  BlocBuilder<LoginBloc, LoginState>(
-                      buildWhen: (current, previous) => current.email != previous.email,
+                        const SizedBox(width: 8.0),
+                        Icon(
+                          Icons.call_split,
+                          color: Colors.blue.shade500,
+                          size: 30.0,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 30),
+                    BlocBuilder<LoginBloc, LoginState>(
+                      buildWhen: (current, previous) =>
+                      current.email != previous.email,
                       builder: (context, state) {
                         return TextFormField(
                           keyboardType: TextInputType.emailAddress,
                           focusNode: emailFocusNode,
-                          decoration: const InputDecoration(hintText: 'Email', border: OutlineInputBorder()),
+                          decoration: const InputDecoration(
+                              hintText: 'Email', border: OutlineInputBorder()),
                           onChanged: (value) {
-                            context.read<LoginBloc>().add(EmailChanged(email: value));
+                            context
+                                .read<LoginBloc>()
+                                .add(EmailChanged(email: value));
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -125,21 +130,24 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                             return null;
                           },
-                          onFieldSubmitted: (value) {},
                         );
-                      }
-                  ),
-                  const SizedBox(height: 20),
-                  BlocBuilder<LoginBloc, LoginState>(
-                      buildWhen: (current, previous) => current.password != previous.password,
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    BlocBuilder<LoginBloc, LoginState>(
+                      buildWhen: (current, previous) =>
+                      current.password != previous.password,
                       builder: (context, state) {
                         return TextFormField(
                           keyboardType: TextInputType.text,
                           focusNode: passwordFocusNode,
-                          obscureText: true, // Hides the text in the password field
-                          decoration: const InputDecoration(hintText: 'Password', border: OutlineInputBorder()),
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              hintText: 'Password', border: OutlineInputBorder()),
                           onChanged: (value) {
-                            context.read<LoginBloc>().add(PasswordChanged(password: value));
+                            context
+                                .read<LoginBloc>()
+                                .add(PasswordChanged(password: value));
                           },
                           validator: (value) {
                             if (value!.isEmpty) {
@@ -147,38 +155,43 @@ class _LoginScreenState extends State<LoginScreen> {
                             }
                             return null;
                           },
-                          onFieldSubmitted: (value) {},
                         );
-                      }
-                  ),
-                  const SizedBox(height: 50),
-                  Row(
-                    children: [
-                      BlocBuilder<LoginBloc, LoginState>(
-                          buildWhen: (current, previous) => current.loginStatus != previous.loginStatus,
-                          builder: (context, state) {
-                            return ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  context.read<LoginBloc>().add(LoginApi());
-                                }
-                              },
-                              child: state.loginStatus == LoginStatus.loading
-                                  ? CircularProgressIndicator()
-                                  : const Text('Login'),
-                            );
-                          }
-                      ),
-                      Spacer(),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/');
-                          },
-                          child: Text("Register")
-                      ),
-                    ],
-                  ),
-                ],
+                      },
+                    ),
+                    const SizedBox(height: 50),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: BlocBuilder<LoginBloc, LoginState>(
+                            buildWhen: (current, previous) =>
+                            current.loginStatus != previous.loginStatus,
+                            builder: (context, state) {
+                              return ElevatedButton(
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    context.read<LoginBloc>().add(LoginApi());
+                                  }
+                                },
+                                child: state.loginStatus == LoginStatus.loading
+                                    ? const CircularProgressIndicator()
+                                    : const Text('Login'),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/');
+                            },
+                            child: const Text("Register"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

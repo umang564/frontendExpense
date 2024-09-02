@@ -157,6 +157,54 @@ class _OneoneState extends State<Oneone> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Total Owe Amount:',
+                      style: TextStyle(
+                        fontSize: 18.0, // Increase the font size
+                        fontWeight: FontWeight.bold, // Make the text bold
+                        color: Colors.red, // Set the text color to red
+                      ),
+                    ),
+                    Text(
+                      '\$$totaloweamount', // Assuming it's a monetary value
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500, // Medium weight
+                        color: Colors.black, // Set the text color to black
+                      ),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Total Lent Amount:',
+                      style: TextStyle(
+                        fontSize: 18.0, // Increase the font size
+                        fontWeight: FontWeight.bold, // Make the text bold
+                        color: Colors.green, // Set the text color to green
+                      ),
+                    ),
+                    Text(
+                      '\$$totallentamount', // Assuming it's a monetary value
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500, // Medium weight
+                        color: Colors.black, // Set the text color to black
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
@@ -202,7 +250,8 @@ class _OneoneState extends State<Oneone> {
                         subtitle: Text(
                           'Amount: ${item.amount}\n'
                               'Group Name: ${item.groupName}\n' 'Date of settlement :'
-                              '${item.deletedAt == null ? 'Not settle' : item.deletedAt!.substring(0, 10)}',
+                              '${item.deletedAt == null ? 'Not settle'
+                              '' : item.deletedAt!.substring(0, 10)}',
                         ),
                         trailing: Text(item.createdAt?.substring(0, 10) ?? ''),
                       ),

@@ -118,10 +118,10 @@ class _UserExpenseHistoryState extends State<UserExpenseHistory> with SingleTick
           int displayAmount;
 
           if (item.amount != null && item.amount! < 0) {
-            status = 'Owe by ${item.oweOrLent}';
+            status = 'Owe to ${item.oweOrLent}';
             displayAmount = item.amount!.abs();
           } else {
-            status = 'Lend by ${item.oweOrLent}';
+            status = 'Lend to  ${item.oweOrLent}';
             displayAmount = item.amount ?? 0;
           }
 
