@@ -19,39 +19,41 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loginBlocs = LoginBloc();
   }
 
+  @override
+  void dispose() {
+    _loginBlocs.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
-        backgroundColor: Colors.blueAccent, // Set the background color of the header
-        elevation: 4.0, // Add some shadow to the header
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        elevation: 4.0,
         title: Row(
           children: [
             Text(
-              'Login', // Display the user's name or a default title
+              'Login',
               style: const TextStyle(
-                fontSize: 20.0, // Set the font size
-                fontWeight: FontWeight.bold, // Make the text bold
-                color: Colors.white, // Text color
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
-           Spacer(),
+            Spacer(),
             Text(
-              'Splito', // Display the user's name or a default title
+              'Splito',
               style: const TextStyle(
-                fontSize: 20.0, // Set the font size
-                fontWeight: FontWeight.bold, // Make the text bold
-                color: Colors.white, // Text color
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-            )
-
-
+            ),
           ],
         ),
       ),
@@ -79,14 +81,34 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SnackBar(content: Text('Login successful')),
                     );
                   Navigator.pushNamed(context, '/home');
-
                 }
-
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Splito',
+                        style: TextStyle(
+                          color: Colors.blue.shade500, // Apply blue color (shades of blue)
+                          fontSize: 24.0, // Make the font size bigger
+                          fontWeight: FontWeight.bold, // Make the text bold
+                          fontStyle: FontStyle.italic, // Make the text italic
+                        ),
+                      ),
+                      SizedBox(width: 8.0), // Add some spacing between text and icon
+                      Icon(
+                        Icons.call_split,
+                        color: Colors.blue.shade500, // Apply the same color as the text
+                        size: 30.0, // Increase the size of the icon
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30), // Space between title and form
+
                   BlocBuilder<LoginBloc, LoginState>(
                       buildWhen: (current, previous) => current.email != previous.email,
                       builder: (context, state) {
@@ -105,16 +127,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           onFieldSubmitted: (value) {},
                         );
-                      }),
-                  const SizedBox(
-                    height: 20,
+                      }
                   ),
+                  const SizedBox(height: 20),
                   BlocBuilder<LoginBloc, LoginState>(
                       buildWhen: (current, previous) => current.password != previous.password,
                       builder: (context, state) {
                         return TextFormField(
                           keyboardType: TextInputType.text,
                           focusNode: passwordFocusNode,
+                          obscureText: true, // Hides the text in the password field
                           decoration: const InputDecoration(hintText: 'Password', border: OutlineInputBorder()),
                           onChanged: (value) {
                             context.read<LoginBloc>().add(PasswordChanged(password: value));
@@ -127,30 +149,35 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           onFieldSubmitted: (value) {},
                         );
-                      }),
-                  const SizedBox(
-                    height: 50,
+                      }
                   ),
+                  const SizedBox(height: 50),
                   Row(
                     children: [
                       BlocBuilder<LoginBloc, LoginState>(
                           buildWhen: (current, previous) => current.loginStatus != previous.loginStatus,
                           builder: (context, state) {
                             return ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                    context.read<LoginBloc>().add(LoginApi());
-                                  }
-                                },
-                                child: state.loginStatus == LoginStatus.loading ? CircularProgressIndicator() : const Text('Login'));
-                          }),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  context.read<LoginBloc>().add(LoginApi());
+                                }
+                              },
+                              child: state.loginStatus == LoginStatus.loading
+                                  ? CircularProgressIndicator()
+                                  : const Text('Login'),
+                            );
+                          }
+                      ),
                       Spacer(),
-                      ElevatedButton(onPressed: (){
-                        Navigator.pushNamed(context, '/');
-
-                      }, child: Text("Register"))
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/');
+                          },
+                          child: Text("Register")
+                      ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

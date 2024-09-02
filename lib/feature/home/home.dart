@@ -195,6 +195,15 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           },
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // Define the action to perform when the FAB is pressed
+            Navigator.pushNamed(context, '/oneone');
+          },
+          child: Icon(Icons.currency_exchange_sharp),
+          backgroundColor: Colors.blueAccent,
+          tooltip: 'Add Group',
+        ),
       ),
     );
   }

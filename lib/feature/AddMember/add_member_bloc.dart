@@ -81,10 +81,23 @@ void _onGroupIdChanged(GroupIdChanged event, Emitter<AddMemberState>emit){
       }
     } catch (e) {
       print('Error: $e'); // Log the error for debugging
-      emit(state.copyWith(
-        addMemberStatus: AddMemberStatus.error,
-        message: e.toString(),
-      ));
+      if (e is DioException) {
+        final errorMessage = e.response?.data['message'] ?? "An unexpected error occurred";
+
+        emit(state.copyWith(
+          addMemberStatus: AddMemberStatus.error,
+          message: errorMessage,
+        ));
+
+
+      } else {
+        // Handle other types of exceptions
+        print('Error: $e');
+        emit(state.copyWith(
+          addMemberStatus: AddMemberStatus.error,
+          message: e.toString(),
+        ));
+      }
     }
   }
 

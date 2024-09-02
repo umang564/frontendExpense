@@ -3,6 +3,7 @@ import 'package:flutterproject/feature/AddMember/addMember.dart';
 import 'package:flutterproject/feature/CreateGroup/CreateGroup.dart';
 import 'package:flutterproject/feature/Exchange/exchange.dart';
 import 'package:flutterproject/feature/GroupPage/Group.dart';
+import 'package:flutterproject/feature/OneOne.dart';
 import 'package:flutterproject/feature/ViewMember/viewMember.dart';
 import 'package:flutterproject/feature/home/home.dart';
 import 'package:flutterproject/screens/app.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutterproject/feature/Profile.dart';
 import 'package:flutterproject/feature/Settledhistory.dart';
 import 'package:flutterproject/feature/UserExpenseHistory.dart';
+import 'package:flutterproject/feature/OneOne.dart';
 
 
 void main() {
@@ -54,7 +56,8 @@ class MyApp extends StatelessWidget {
           '/csv': (context) => CsvGeneratorPage(),
           '/profile':(context )=>ProfilePage(),
           '/SettledHistory':(context)=>Settledhistory(),
-          '/expense':(context)=>UserExpenseHistory()
+          '/expense':(context)=>UserExpenseHistory(),
+          '/oneone':(context)=>Oneone()
         }, // Home widget where your main app content resides
       ),
     );

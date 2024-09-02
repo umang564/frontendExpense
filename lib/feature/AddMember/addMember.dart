@@ -126,7 +126,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
           backgroundColor: Colors.blueAccent,
           elevation: 4.0,
           title: const Text(
-            'Add member',
+            'Add Member',
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
