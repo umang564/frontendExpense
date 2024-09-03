@@ -32,6 +32,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   late int id;
   late int adminId;
 
+  List<String> new_select = [];
+
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -259,7 +262,8 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                               if (state.memberlist.isNotEmpty)
                                 DropDownMultiSelect(
                                   options: state.memberlist.map((member) => member.name ?? '').toList(),
-                                  selectedValues: state.selectedMemberIds.map((id) {
+                                  selectedValues:
+                                  state.selectedMemberIds.map((id) {
                                     final member = state.memberlist.firstWhere(
                                           (member) => member.iD == id,
                                       orElse: () => ViewMemberModel(name: ''),
@@ -267,6 +271,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                                     return member.name ?? '';
                                   }).where((name) => name.isNotEmpty).toList(),
                                   onChanged: (List<String> selectedNames) {
+                                    print(state.memberlist);
                                     final selectedIds = selectedNames.map((name) {
                                       return state.memberlist.firstWhere(
                                             (member) => member.name == name,

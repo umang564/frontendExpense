@@ -57,6 +57,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           await storage.write(key: 'token', value: token);
           await storage.write(key:'current_user_id',value:id.toString());
           await storage.write(key: 'name', value: name);
+          await storage.write(key:'profilePictureUrl',value:"https://cdn.pixabay.com/photo/2014/04/03/10/32/user-310807_1280.png");
 
           emit(
             state.copyWith(
